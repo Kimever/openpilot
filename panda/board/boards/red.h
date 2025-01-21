@@ -1,12 +1,8 @@
-#pragma once
-
-#include "board_declarations.h"
-
 // ///////////////////////////// //
 // Red Panda (STM32H7) + Harness //
 // ///////////////////////////// //
 
-static void red_enable_can_transceiver(uint8_t transceiver, bool enabled) {
+void red_enable_can_transceiver(uint8_t transceiver, bool enabled) {
   switch (transceiver) {
     case 1U:
       set_gpio_output(GPIOG, 11, !enabled);
@@ -25,7 +21,7 @@ static void red_enable_can_transceiver(uint8_t transceiver, bool enabled) {
   }
 }
 
-static void red_enable_can_transceivers(bool enabled) {
+void red_enable_can_transceivers(bool enabled) {
   uint8_t main_bus = (harness.status == HARNESS_STATUS_FLIPPED) ? 3U : 1U;
   for (uint8_t i=1U; i<=4U; i++) {
     // Leave main CAN always on for CAN-based ignition detection
@@ -37,7 +33,7 @@ static void red_enable_can_transceivers(bool enabled) {
   }
 }
 
-static void red_set_led(uint8_t color, bool enabled) {
+void red_set_led(uint8_t color, bool enabled) {
   switch (color) {
     case LED_RED:
       set_gpio_output(GPIOE, 4, !enabled);
@@ -53,7 +49,7 @@ static void red_set_led(uint8_t color, bool enabled) {
   }
 }
 
-static void red_set_can_mode(uint8_t mode) {
+void red_set_can_mode(uint8_t mode) {
   red_enable_can_transceiver(2U, false);
   red_enable_can_transceiver(4U, false);
   switch (mode) {
@@ -95,16 +91,16 @@ static void red_set_can_mode(uint8_t mode) {
   }
 }
 
-static bool red_check_ignition(void) {
+bool red_check_ignition(void) {
   // ignition is checked through harness
   return harness_check_ignition();
 }
 
-static uint32_t red_read_voltage_mV(void){
+uint32_t red_read_voltage_mV(void){
   return adc_get_mV(2) * 11U; // TODO: is this correct?
 }
 
-static void red_init(void) {
+void red_init(void) {
   common_init_gpio();
 
   //C10,C11 : OBD_SBU1_RELAY, OBD_SBU2_RELAY
@@ -157,7 +153,7 @@ static void red_init(void) {
   red_set_can_mode(CAN_MODE_NORMAL);
 }
 
-static harness_configuration red_harness_config = {
+harness_configuration red_harness_config = {
   .has_harness = true,
   .GPIO_SBU1 = GPIOC,
   .GPIO_SBU2 = GPIOA,
@@ -178,7 +174,6 @@ board board_red = {
   .has_spi = false,
   .has_canfd = true,
   .fan_max_rpm = 0U,
-  .fan_max_pwm = 100U,
   .avdd_mV = 3300U,
   .fan_stall_recovery = false,
   .fan_enable_cooldown_time = 0U,
@@ -194,6 +189,5 @@ board board_red = {
   .set_fan_enabled = unused_set_fan_enabled,
   .set_ir_power = unused_set_ir_power,
   .set_siren = unused_set_siren,
-  .read_som_gpio = unused_read_som_gpio,
-  .set_amp_enabled = unused_set_amp_enabled
+  .read_som_gpio = unused_read_som_gpio
 };

@@ -43,12 +43,12 @@ bool get_relay_malfunction(void){
   return relay_malfunction;
 }
 
-bool get_gas_pressed_prev(void){
-  return gas_pressed_prev;
+int get_gas_interceptor_prev(void){
+  return gas_interceptor_prev;
 }
 
-void set_gas_pressed_prev(bool c){
-  gas_pressed_prev = c;
+bool get_gas_pressed_prev(void){
+  return gas_pressed_prev;
 }
 
 bool get_brake_pressed_prev(void){

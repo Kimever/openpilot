@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -10,7 +10,7 @@ fi
 
 cd $CPPCHECK_DIR
 
-VERS="2.16.0"
+VERS="2.14.1"
 git fetch --all --tags --force
 git checkout $VERS
 
