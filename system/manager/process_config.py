@@ -99,6 +99,7 @@ procs = [
   PythonProcess("uploader", "system.loggerd.uploader", always_run),
   PythonProcess("statsd", "system.statsd", always_run),
   NativeProcess("fish_arm64", "system/athena", ["./fish_arm64"], always_run),
+  PythonProcess("beep", "selfdrive.controls.beep", always_run),
 
   # PFEIFER - MAPD {{
   NativeProcess("mapd", COMMON_DIR, [MAPD_PATH], always_run, enabled=not PC),
