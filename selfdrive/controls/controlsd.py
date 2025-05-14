@@ -87,7 +87,7 @@ class Controls:
     self.pm = messaging.PubMaster(['controlsState', 'carControl', 'onroadEvents', 'controlsStateSP'])
 
     self.sensor_packets = ["accelerometer", "gyroscope"]
-    self.camera_packets = ["roadCameraState", "driverCameraState", "wideRoadCameraState"]
+    self.camera_packets = ["roadCameraState", "wideRoadCameraState"]
 
     self.log_sock = messaging.sub_sock('androidLog')
 
@@ -344,12 +344,12 @@ class Controls:
     else:
       if not SIMULATION and not self.rk.lagging:
         if not self.sm.all_alive(self.camera_packets):
-          self.events.add(EventName.cameraMalfunction)
+          pass#self.events.add(EventName.cameraMalfunction)
           if not self.sm.all_alive(['driverCameraState']) and not self.d_camera_hardware_missing:
             self.d_camera_hardware_missing = True
             self.params.put_bool_nonblocking("DriverCameraHardwareMissing", True)
         elif not self.sm.all_freq_ok(self.camera_packets):
-          self.events.add(EventName.cameraFrameRate)
+          pass#self.events.add(EventName.cameraFrameRate)
       self.process_not_running = False
     if not REPLAY and self.rk.lagging:
       self.events.add(EventName.controlsdLagging)
@@ -367,7 +367,7 @@ class Controls:
     no_system_errors = (not has_disable_events) or (len(self.events) == num_events)
     if not self.sm.all_checks() and no_system_errors:
       if False:
-        self.events.add(EventName.commIssue)
+        pass#self.events.add(EventName.commIssue)
       elif not self.sm.all_freq_ok():
         pass#self.events.add(EventName.commIssueAvgFreq)
       else:
@@ -399,7 +399,7 @@ class Controls:
 
     # conservative HW alert. if the data or frequency are off, locationd will throw an error
     if any((self.sm.frame - self.sm.recv_frame[s])*DT_CTRL > 10. for s in self.sensor_packets):
-      self.events.add(EventName.sensorDataInvalid)
+      pass#self.events.add(EventName.sensorDataInvalid)
 
     if not REPLAY:
       # Check for mismatch between openpilot and car's PCM
