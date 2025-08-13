@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 #define FAULT_STATUS_NONE 0U
 #define FAULT_STATUS_TEMPORARY 1U
 #define FAULT_STATUS_PERMANENT 2U
@@ -33,6 +34,9 @@
 
 // Permanent faults
 #define PERMANENT_FAULTS 0U
+=======
+#include "faults_declarations.h"
+>>>>>>> Stashed changes
 
 uint8_t fault_status = FAULT_STATUS_NONE;
 uint32_t faults = 0U;

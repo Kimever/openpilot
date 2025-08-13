@@ -6,8 +6,12 @@ import threading
 from flaky import flaky
 from collections import defaultdict
 
+<<<<<<< Updated upstream
 from panda import Panda
 from panda.tests.hitl.conftest import PandaGroup
+=======
+from opendbc.car.structs import CarParams
+>>>>>>> Stashed changes
 from panda.tests.hitl.helpers import time_many_sends, get_random_can_messages, clear_can_buffers
 
 @flaky(max_runs=3, min_passes=1)
@@ -90,7 +94,6 @@ def test_latency(p, panda_jungle):
 
 
 @pytest.mark.panda_expect_can_error
-@pytest.mark.test_panda_types(PandaGroup.GEN2)
 def test_gen2_loopback(p, panda_jungle):
   def test(p_send, p_recv, address=None):
     for bus in range(4):

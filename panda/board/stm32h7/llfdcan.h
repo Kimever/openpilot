@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // SAE J2284-4 document specifies a bus-line network running at 2 Mbit/s
 // SAE J2284-5 document specifies a point-to-point communication running at 5 Mbit/s
 
@@ -47,6 +48,15 @@ const uint32_t data_speeds[] = {100U, 200U, 500U, 1000U, 1250U, 2500U, 5000U, 10
 
 
 bool fdcan_request_init(FDCAN_GlobalTypeDef *FDCANx) {
+=======
+#include "llfdcan_declarations.h"
+
+// kbps multiplied by 10
+const uint32_t speeds[SPEEDS_ARRAY_SIZE] = {100U, 200U, 500U, 1000U, 1250U, 2500U, 5000U, 10000U};
+const uint32_t data_speeds[DATA_SPEEDS_ARRAY_SIZE] = {100U, 200U, 500U, 1000U, 1250U, 2500U, 5000U, 10000U, 20000U, 50000U};
+
+static bool fdcan_request_init(FDCAN_GlobalTypeDef *FDCANx) {
+>>>>>>> Stashed changes
   bool ret = true;
   // Exit from sleep mode
   FDCANx->CCCR &= ~(FDCAN_CCCR_CSR);
@@ -68,7 +78,11 @@ bool fdcan_request_init(FDCAN_GlobalTypeDef *FDCANx) {
   return ret;
 }
 
+<<<<<<< Updated upstream
 bool fdcan_exit_init(FDCAN_GlobalTypeDef *FDCANx) {
+=======
+static bool fdcan_exit_init(FDCAN_GlobalTypeDef *FDCANx) {
+>>>>>>> Stashed changes
   bool ret = true;
 
   FDCANx->CCCR &= ~(FDCAN_CCCR_INIT);

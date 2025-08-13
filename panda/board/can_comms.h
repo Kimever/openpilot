@@ -18,7 +18,11 @@ typedef struct {
   uint8_t data[72];
 } asm_buffer;
 
+<<<<<<< Updated upstream
 asm_buffer can_read_buffer = {.ptr = 0U, .tail_size = 0U};
+=======
+static asm_buffer can_read_buffer = {.ptr = 0U, .tail_size = 0U};
+>>>>>>> Stashed changes
 
 int comms_can_read(uint8_t *data, uint32_t max_len) {
   uint32_t pos = 0U;
@@ -38,10 +42,17 @@ int comms_can_read(uint8_t *data, uint32_t max_len) {
     while ((pos < max_len) && can_pop(&can_rx_q, &can_packet)) {
       uint32_t pckt_len = CANPACKET_HEAD_SIZE + dlc_to_len[can_packet.data_len_code];
       if ((pos + pckt_len) <= max_len) {
+<<<<<<< Updated upstream
         (void)memcpy(&data[pos], &can_packet, pckt_len);
         pos += pckt_len;
       } else {
         (void)memcpy(&data[pos], &can_packet, max_len - pos);
+=======
+        (void)memcpy(&data[pos], (uint8_t*)&can_packet, pckt_len);
+        pos += pckt_len;
+      } else {
+        (void)memcpy(&data[pos], (uint8_t*)&can_packet, max_len - pos);
+>>>>>>> Stashed changes
         can_read_buffer.ptr += pckt_len - (max_len - pos);
         // cppcheck-suppress objectIndex
         (void)memcpy(can_read_buffer.data, &((uint8_t*)&can_packet)[(max_len - pos)], can_read_buffer.ptr);
@@ -53,7 +64,11 @@ int comms_can_read(uint8_t *data, uint32_t max_len) {
   return pos;
 }
 
+<<<<<<< Updated upstream
 asm_buffer can_write_buffer = {.ptr = 0U, .tail_size = 0U};
+=======
+static asm_buffer can_write_buffer = {.ptr = 0U, .tail_size = 0U};
+>>>>>>> Stashed changes
 
 // send on CAN
 void comms_can_write(const uint8_t *data, uint32_t len) {
@@ -69,7 +84,11 @@ void comms_can_write(const uint8_t *data, uint32_t len) {
       pos += can_write_buffer.tail_size;
 
       // send out
+<<<<<<< Updated upstream
       (void)memcpy(&to_push, can_write_buffer.data, can_write_buffer.ptr);
+=======
+      (void)memcpy((uint8_t*)&to_push, can_write_buffer.data, can_write_buffer.ptr);
+>>>>>>> Stashed changes
       can_send(&to_push, to_push.bus, false);
 
       // reset overflow buffer
@@ -90,7 +109,11 @@ void comms_can_write(const uint8_t *data, uint32_t len) {
     uint32_t pckt_len = CANPACKET_HEAD_SIZE + dlc_to_len[(data[pos] >> 4U)];
     if ((pos + pckt_len) <= len) {
       CANPacket_t to_push = {0};
+<<<<<<< Updated upstream
       (void)memcpy(&to_push, &data[pos], pckt_len);
+=======
+      (void)memcpy((uint8_t*)&to_push, &data[pos], pckt_len);
+>>>>>>> Stashed changes
       can_send(&to_push, to_push.bus, false);
       pos += pckt_len;
     } else {

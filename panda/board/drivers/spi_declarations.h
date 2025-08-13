@@ -1,6 +1,10 @@
 #pragma once
 
+<<<<<<< Updated upstream
 #include "crc.h"
+=======
+#include "board/crc.h"
+>>>>>>> Stashed changes
 
 #define SPI_TIMEOUT_US 10000U
 
@@ -35,7 +39,11 @@ enum {
   SPI_STATE_DATA_TX
 };
 
+<<<<<<< Updated upstream
 extern uint16_t spi_checksum_error_count;
+=======
+extern uint16_t spi_error_count;
+>>>>>>> Stashed changes
 
 #define SPI_HEADER_SIZE 7U
 
@@ -45,8 +53,14 @@ void llspi_mosi_dma(uint8_t *addr, int len);
 void llspi_miso_dma(uint8_t *addr, int len);
 
 void can_tx_comms_resume_spi(void);
+<<<<<<< Updated upstream
 #if defined(ENABLE_SPI) || defined(BOOTSTUB)
 void spi_init(void);
 void spi_rx_done(void);
 void spi_tx_done(bool reset);
 #endif
+=======
+void spi_init(void);
+void spi_rx_done(void);
+void spi_tx_done(bool reset);
+>>>>>>> Stashed changes

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // WARNING: To stay in compliance with the SIL2 rules laid out in STM UM1840, we should never implement any of the available hardware low power modes.
 // See rule: CoU_3
 
@@ -8,6 +9,24 @@ int power_save_status = POWER_SAVE_STATUS_DISABLED;
 
 void set_power_save_state(int state) {
 
+=======
+#include "power_saving_declarations.h"
+
+// WARNING: To stay in compliance with the SIL2 rules laid out in STM UM1840, we should never implement any of the available hardware low power modes.
+// See rule: CoU_3
+
+int power_save_status = POWER_SAVE_STATUS_DISABLED;
+
+void enable_can_transceivers(bool enabled) {
+  // Leave main CAN always on for CAN-based ignition detection
+  uint8_t main_bus = (harness.status == HARNESS_STATUS_FLIPPED) ? 3U : 1U;
+  for(uint8_t i=1U; i<=4U; i++){
+    current_board->enable_can_transceiver(i, (i == main_bus) || enabled);
+  }
+}
+
+void set_power_save_state(int state) {
+>>>>>>> Stashed changes
   bool is_valid_state = (state == POWER_SAVE_STATUS_ENABLED) || (state == POWER_SAVE_STATUS_DISABLED);
   if (is_valid_state && (state != power_save_status)) {
     bool enable = false;
@@ -34,7 +53,11 @@ void set_power_save_state(int state) {
       enable = true;
     }
 
+<<<<<<< Updated upstream
     current_board->enable_can_transceivers(enable);
+=======
+    enable_can_transceivers(enable);
+>>>>>>> Stashed changes
 
     // Switch off IR when in power saving
     if(!enable){

@@ -4,7 +4,11 @@ extern int _app_start[0xc000]; // Only first 3 sectors of size 0x4000 are used
 void set_safety_mode(uint16_t mode, uint16_t param);
 bool is_car_safety_mode(uint16_t mode);
 
+<<<<<<< Updated upstream
 int get_health_pkt(void *dat) {
+=======
+static int get_health_pkt(void *dat) {
+>>>>>>> Stashed changes
   COMPILE_TIME_ASSERT(sizeof(struct health_t) <= USBPACKET_MAX_SIZE);
   struct health_t * health = (struct health_t*)dat;
 
@@ -12,8 +16,12 @@ int get_health_pkt(void *dat) {
   health->voltage_pkt = current_board->read_voltage_mV();
   health->current_pkt = current_board->read_current_mA();
 
+<<<<<<< Updated upstream
   // Use the GPIO pin to determine ignition or use a CAN based logic
   health->ignition_line_pkt = (uint8_t)(current_board->check_ignition());
+=======
+  health->ignition_line_pkt = (uint8_t)(harness_check_ignition());
+>>>>>>> Stashed changes
   health->ignition_can_pkt = ignition_can;
 
   health->controls_allowed_pkt = controls_allowed;
@@ -29,7 +37,13 @@ int get_health_pkt(void *dat) {
   health->heartbeat_lost_pkt = heartbeat_lost;
   health->safety_rx_checks_invalid_pkt = safety_rx_checks_invalid;
 
+<<<<<<< Updated upstream
   health->spi_checksum_error_count_pkt = spi_checksum_error_count;
+=======
+  #ifndef STM32F4
+  health->spi_error_count_pkt = spi_error_count;
+  #endif
+>>>>>>> Stashed changes
 
   health->fault_status_pkt = fault_status;
   health->faults_pkt = faults;
@@ -97,7 +111,11 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
       resp[1] = ((fan_state.rpm & 0xFF00U) >> 8U);
       resp_len = 2;
       break;
+<<<<<<< Updated upstream
     // **** 0xc0: reset communications
+=======
+    // **** 0xc0: reset communications state
+>>>>>>> Stashed changes
     case 0xc0:
       comms_can_reset();
       break;
@@ -117,7 +135,11 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
         can_health[req->param1].brs_enabled = bus_config[req->param1].brs_enabled;
         can_health[req->param1].canfd_non_iso = bus_config[req->param1].canfd_non_iso;
         resp_len = sizeof(can_health[req->param1]);
+<<<<<<< Updated upstream
         (void)memcpy(resp, &can_health[req->param1], resp_len);
+=======
+        (void)memcpy(resp, (uint8_t*)(&can_health[req->param1]), resp_len);
+>>>>>>> Stashed changes
       }
       break;
     // **** 0xc3: fetch MCU UID
@@ -212,6 +234,7 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
       break;
     // **** 0xdb: set OBD CAN multiplexing mode
     case 0xdb:
+<<<<<<< Updated upstream
       if (current_board->has_obd) {
         if (req->param1 == 1U) {
           // Enable OBD CAN
@@ -223,6 +246,16 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
       }
       break;
 
+=======
+      if (req->param1 == 1U) {
+        // Enable OBD CAN
+        current_board->set_can_mode(CAN_MODE_OBD_CAN2);
+      } else {
+        // Disable OBD CAN
+        current_board->set_can_mode(CAN_MODE_NORMAL);
+      }
+      break;
+>>>>>>> Stashed changes
     // **** 0xdc: set safety mode
     case 0xdc:
       set_safety_mode(req->param1, (uint16_t)req->param2);
@@ -263,6 +296,7 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
         ++resp_len;
       }
       break;
+<<<<<<< Updated upstream
     // **** 0xe1: uart set baud rate
     case 0xe1:
       ur = get_ring_by_number(req->param1);
@@ -304,19 +338,34 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
       }
       uart_set_baud(ur->uart, (int)req->param2*300);
       break;
+=======
+>>>>>>> Stashed changes
     // **** 0xe5: set CAN loopback (for testing)
     case 0xe5:
       can_loopback = req->param1 > 0U;
       can_init_all();
       break;
+<<<<<<< Updated upstream
     // **** 0xe6: set custom clock source period
     case 0xe6:
       clock_source_set_period(req->param1);
+=======
+    // **** 0xe6: set custom clock source period and pulse length
+    case 0xe6:
+      clock_source_set_timer_params(req->param1, req->param2);
+>>>>>>> Stashed changes
       break;
     // **** 0xe7: set power save state
     case 0xe7:
       set_power_save_state(req->param1);
       break;
+<<<<<<< Updated upstream
+=======
+    // **** 0xe8: set can-fd auto swithing mode
+    case 0xe8:
+      bus_config[req->param1].canfd_auto = req->param2 > 0U;
+      break;
+>>>>>>> Stashed changes
     // **** 0xf1: Clear CAN ring buffer.
     case 0xf1:
       if (req->param1 == 0xFFFFU) {
@@ -329,6 +378,7 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
         print("Clearing CAN CAN ring buffer failed: wrong bus number\n");
       }
       break;
+<<<<<<< Updated upstream
     // **** 0xf2: Clear UART ring buffer.
     case 0xf2:
       {
@@ -339,6 +389,8 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
         }
         break;
       }
+=======
+>>>>>>> Stashed changes
     // **** 0xf3: Heartbeat. Resets heartbeat counter.
     case 0xf3:
       {
@@ -365,7 +417,10 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
     // **** 0xf9: set CAN FD data bitrate
     case 0xf9:
       if ((req->param1 < PANDA_CAN_CNT) &&
+<<<<<<< Updated upstream
            current_board->has_canfd &&
+=======
+>>>>>>> Stashed changes
            is_speed_valid(req->param2, data_speeds, sizeof(data_speeds)/sizeof(data_speeds[0]))) {
         bus_config[req->param1].can_data_speed = req->param2;
         bus_config[req->param1].canfd_enabled = (req->param2 >= bus_config[req->param1].can_speed);
@@ -376,7 +431,11 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
       break;
     // **** 0xfc: set CAN FD non-ISO mode
     case 0xfc:
+<<<<<<< Updated upstream
       if ((req->param1 < PANDA_CAN_CNT) && current_board->has_canfd) {
+=======
+      if (req->param1 < PANDA_CAN_CNT) {
+>>>>>>> Stashed changes
         bus_config[req->param1].canfd_non_iso = (req->param2 != 0U);
         bool ret = can_init(CAN_NUM_FROM_BUS_NUM(req->param1));
         UNUSED(ret);

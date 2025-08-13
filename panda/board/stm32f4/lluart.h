@@ -20,6 +20,7 @@ void uart_tx_ring(uart_ring *q){
   EXIT_CRITICAL();
 }
 
+<<<<<<< Updated upstream
 void uart_rx_ring(uart_ring *q){
   ENTER_CRITICAL();
 
@@ -80,13 +81,21 @@ void uart_interrupt_handler(uart_ring *q) {
 
 void USART2_IRQ_Handler(void) { uart_interrupt_handler(&uart_ring_debug); }
 
+=======
+// This read after reading SR clears all error interrupts. We don't want compiler warnings, nor optimizations
+#define UART_READ_DR(uart) volatile uint8_t t = (uart)->DR; UNUSED(t);
+
+>>>>>>> Stashed changes
 // ***************************** Hardware setup *****************************
 
 #define DIV_(_PCLK_, _BAUD_)                    (((_PCLK_) * 25U) / (4U * (_BAUD_)))
 #define DIVMANT_(_PCLK_, _BAUD_)                (DIV_((_PCLK_), (_BAUD_)) / 100U)
 #define DIVFRAQ_(_PCLK_, _BAUD_)                ((((DIV_((_PCLK_), (_BAUD_)) - (DIVMANT_((_PCLK_), (_BAUD_)) * 100U)) * 16U) + 50U) / 100U)
 #define USART_BRR_(_PCLK_, _BAUD_)              ((DIVMANT_((_PCLK_), (_BAUD_)) << 4) | (DIVFRAQ_((_PCLK_), (_BAUD_)) & 0x0FU))
+<<<<<<< Updated upstream
 
 void uart_set_baud(USART_TypeDef *u, unsigned int baud) {
   u->BRR = USART_BRR_(APB1_FREQ*1000000U, baud);
 }
+=======
+>>>>>>> Stashed changes

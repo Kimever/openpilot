@@ -1,3 +1,8 @@
+<<<<<<< Updated upstream
+=======
+#pragma once
+
+>>>>>>> Stashed changes
 void unused_init_bootloader(void) {
 }
 
@@ -23,4 +28,12 @@ void unused_set_bootkick(BootState state) {
 
 bool unused_read_som_gpio(void) {
   return false;
+<<<<<<< Updated upstream
 }
+=======
+}
+
+void unused_set_amp_enabled(bool enabled) {
+  UNUSED(enabled);
+}
+>>>>>>> Stashed changes

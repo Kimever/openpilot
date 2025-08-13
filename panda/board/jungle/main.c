@@ -1,8 +1,14 @@
 // ********************* Includes *********************
 #include "board/config.h"
 
+<<<<<<< Updated upstream
 #include "board/safety.h"
 
+=======
+#include "opendbc/safety/safety.h"
+
+#include "board/drivers/led.h"
+>>>>>>> Stashed changes
 #include "board/drivers/pwm.h"
 #include "board/drivers/usb.h"
 
@@ -10,6 +16,7 @@
 #include "board/provision.h"
 
 #include "board/health.h"
+<<<<<<< Updated upstream
 #include "jungle_health.h"
 
 #include "board/drivers/can_common.h"
@@ -19,11 +26,22 @@
 #else
   #include "board/drivers/bxcan.h"
 #endif
+=======
+#include "board/jungle/jungle_health.h"
+
+#include "board/drivers/can_common.h"
+
+#include "board/drivers/fdcan.h"
+>>>>>>> Stashed changes
 
 #include "board/obj/gitversion.h"
 
 #include "board/can_comms.h"
+<<<<<<< Updated upstream
 #include "main_comms.h"
+=======
+#include "board/jungle/main_comms.h"
+>>>>>>> Stashed changes
 
 
 // ********************* Serial debugging *********************
@@ -60,9 +78,12 @@ void tick_handler(void) {
       }
     }
 
+<<<<<<< Updated upstream
     // tick drivers at 8Hz
     usb_tick();
 
+=======
+>>>>>>> Stashed changes
     // decimated to 1Hz
     if ((loop_counter % 8) == 0U) {
       #ifdef DEBUG
@@ -79,7 +100,11 @@ void tick_handler(void) {
       check_registers();
 
       // turn off the blue LED, turned on by CAN
+<<<<<<< Updated upstream
       current_board->set_led(LED_BLUE, false);
+=======
+      led_set(LED_BLUE, false);
+>>>>>>> Stashed changes
 
       // Blink and OBD CAN
 #ifdef FINAL_PROVISIONING
@@ -90,7 +115,11 @@ void tick_handler(void) {
       uptime_cnt += 1U;
     }
 
+<<<<<<< Updated upstream
     current_board->set_led(LED_GREEN, green_led_enabled);
+=======
+    led_set(LED_GREEN, green_led_enabled);
+>>>>>>> Stashed changes
 
     // Check on button
     bool current_button_status = current_board->get_button();
@@ -108,6 +137,7 @@ void tick_handler(void) {
     current_board->set_individual_ignition(ignition_bitmask);
 
     // SBU voltage reporting
+<<<<<<< Updated upstream
     if (current_board->has_sbu_sense) {
       for (uint8_t i = 0U; i < 6U; i++) {
         CANPacket_t pkt = { 0 };
@@ -119,6 +149,17 @@ void tick_handler(void) {
         can_set_checksum(&pkt);
         can_send(&pkt, 0U, false);
       }
+=======
+    for (uint8_t i = 0U; i < 6U; i++) {
+      CANPacket_t pkt = { 0 };
+      pkt.data_len_code = 8U;
+      pkt.addr = 0x100U + i;
+      *(uint16_t *) &pkt.data[0] = current_board->get_sbu_mV(i + 1U, SBU1);
+      *(uint16_t *) &pkt.data[2] = current_board->get_sbu_mV(i + 1U, SBU2);
+      pkt.data[4] = (ignition_bitmask >> i) & 1U;
+      can_set_checksum(&pkt);
+      can_send(&pkt, 0U, false);
+>>>>>>> Stashed changes
     }
 #else
     // toggle ignition on button press
@@ -149,17 +190,26 @@ int main(void) {
   peripherals_init();
   detect_board_type();
   // red+green leds enabled until succesful USB init, as a debug indicator
+<<<<<<< Updated upstream
   current_board->set_led(LED_RED, true);
   current_board->set_led(LED_GREEN, true);
+=======
+  led_set(LED_RED, true);
+  led_set(LED_GREEN, true);
+>>>>>>> Stashed changes
 
   // print hello
   print("\n\n\n************************ MAIN START ************************\n");
 
   // check for non-supported board types
+<<<<<<< Updated upstream
   if (hw_type == HW_TYPE_UNKNOWN) {
     print("Unsupported board type\n");
     while (1) { /* hang */ }
   }
+=======
+  assert_fatal(hw_type != HW_TYPE_UNKNOWN, "Unsupported board type\n");
+>>>>>>> Stashed changes
 
   print("Config:\n");
   print("  Board type: 0x"); puth(hw_type); print("\n");
@@ -182,8 +232,13 @@ int main(void) {
   // enable USB (right before interrupts or enum can fail!)
   usb_init();
 
+<<<<<<< Updated upstream
   current_board->set_led(LED_RED, false);
   current_board->set_led(LED_GREEN, false);
+=======
+  led_set(LED_RED, false);
+  led_set(LED_GREEN, false);
+>>>>>>> Stashed changes
 
   print("**** INTERRUPTS ON ****\n");
   enable_interrupts();
@@ -229,16 +284,28 @@ int main(void) {
 
     // useful for debugging, fade breaks = panda is overloaded
     for (uint32_t fade = 0U; fade < MAX_LED_FADE; fade += 1U) {
+<<<<<<< Updated upstream
       current_board->set_led(LED_RED, true);
       delay(fade >> 4);
       current_board->set_led(LED_RED, false);
+=======
+      led_set(LED_RED, true);
+      delay(fade >> 4);
+      led_set(LED_RED, false);
+>>>>>>> Stashed changes
       delay((MAX_LED_FADE - fade) >> 4);
     }
 
     for (uint32_t fade = MAX_LED_FADE; fade > 0U; fade -= 1U) {
+<<<<<<< Updated upstream
       current_board->set_led(LED_RED, true);
       delay(fade >> 4);
       current_board->set_led(LED_RED, false);
+=======
+      led_set(LED_RED, true);
+      delay(fade >> 4);
+      led_set(LED_RED, false);
+>>>>>>> Stashed changes
       delay((MAX_LED_FADE - fade) >> 4);
     }
   }

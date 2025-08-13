@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 typedef struct reg {
   volatile uint32_t *address;
@@ -11,11 +12,20 @@ typedef struct reg {
 #define CHECK_COLLISION(hash, addr) (((uint32_t) register_map[hash].address != 0U) && (register_map[hash].address != (addr)))
 
 reg register_map[REGISTER_MAP_SIZE];
+=======
+#include "registers_declarations.h"
+
+static reg register_map[REGISTER_MAP_SIZE];
+>>>>>>> Stashed changes
 
 // Hash spread in first and second iterations seems to be reasonable.
 // See: tests/development/register_hashmap_spread.py
 // Also, check the collision warnings in the debug output, and minimize those.
+<<<<<<< Updated upstream
 uint16_t hash_addr(uint32_t input){
+=======
+static uint16_t hash_addr(uint32_t input){
+>>>>>>> Stashed changes
   return (((input >> 16U) ^ ((((input + 1U) & 0xFFFFU) * HASHING_PRIME) & 0xFFFFU)) & REGISTER_MAP_SIZE);
 }
 
@@ -59,6 +69,7 @@ void check_registers(void){
     if((uint32_t) register_map[i].address != 0U){
       ENTER_CRITICAL()
       if((*(register_map[i].address) & register_map[i].check_mask) != (register_map[i].value & register_map[i].check_mask)){
+<<<<<<< Updated upstream
         #ifdef DEBUG_FAULTS
           print("Register at address 0x"); puth((uint32_t) register_map[i].address); print(" is divergent!");
           print("   Map: 0x"); puth(register_map[i].value);
@@ -66,6 +77,12 @@ void check_registers(void){
           print("   Mask: 0x"); puth(register_map[i].check_mask);
           print("\n");
         #endif
+=======
+        if(!register_map[i].logged_fault){
+          print("Register 0x"); puth((uint32_t) register_map[i].address); print(" divergent! Map: 0x"); puth(register_map[i].value); print(" Reg: 0x"); puth(*(register_map[i].address)); print("\n");
+          register_map[i].logged_fault = true;
+        }
+>>>>>>> Stashed changes
         fault_occurred(FAULT_REGISTER_DIVERGENT);
       }
       EXIT_CRITICAL()

@@ -1,9 +1,13 @@
+<<<<<<< Updated upstream
 #define BOOTSTUB
 
+=======
+>>>>>>> Stashed changes
 #define VERS_TAG 0x53524556
 #define MIN_VERSION 2
 
 // ********************* Includes *********************
+<<<<<<< Updated upstream
 #include "config.h"
 
 #include "drivers/pwm.h"
@@ -11,13 +15,29 @@
 
 #include "early_init.h"
 #include "provision.h"
+=======
+#include "board/config.h"
+
+#include "board/drivers/led.h"
+#include "board/drivers/pwm.h"
+#include "board/drivers/usb.h"
+
+#include "board/early_init.h"
+#include "board/provision.h"
+>>>>>>> Stashed changes
 
 #include "crypto/rsa.h"
 #include "crypto/sha.h"
 
+<<<<<<< Updated upstream
 #include "obj/cert.h"
 #include "obj/gitversion.h"
 #include "flasher.h"
+=======
+#include "board/obj/cert.h"
+#include "board/obj/gitversion.h"
+#include "board/flasher.h"
+>>>>>>> Stashed changes
 
 // cppcheck-suppress unusedFunction ; used in headers not included in cppcheck
 void __initialize_hardware_early(void) {
@@ -31,9 +51,12 @@ void fail(void) {
 // know where to sig check
 extern void *_app_start[];
 
+<<<<<<< Updated upstream
 // FIXME: sometimes your panda will fail flashing and will quickly blink a single Green LED
 // BOUNTY: $200 coupon on shop.comma.ai or $100 check.
 
+=======
+>>>>>>> Stashed changes
 int main(void) {
   // Init interrupt table
   init_interrupts(true);

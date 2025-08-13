@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // Flasher and pedal use raw mailbox access
 #define GET_MAILBOX_BYTE(msg, b) (((int)(b) > 3) ? (((msg)->RDHR >> (8U * ((unsigned int)(b) % 4U))) & 0xFFU) : (((msg)->RDLR >> (8U * (unsigned int)(b))) & 0xFFU))
 #define GET_MAILBOX_BYTES_04(msg) ((msg)->RDLR)
@@ -21,6 +22,13 @@ void print(const char *a);
 // kbps multiplied by 10
 const uint32_t speeds[] = {100U, 200U, 500U, 1000U, 1250U, 2500U, 5000U, 10000U};
 const uint32_t data_speeds[] = {0U}; // No separate data speed, dummy
+=======
+#include "llbxcan_declarations.h"
+
+// kbps multiplied by 10
+const uint32_t speeds[SPEEDS_ARRAY_SIZE] = {100U, 200U, 500U, 1000U, 1250U, 2500U, 5000U, 10000U};
+const uint32_t data_speeds[DATA_SPEEDS_ARRAY_SIZE] = {0U}; // No separate data speed, dummy
+>>>>>>> Stashed changes
 
 bool llcan_set_speed(CAN_TypeDef *CANx, uint32_t speed, bool loopback, bool silent) {
   bool ret = true;

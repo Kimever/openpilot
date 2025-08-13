@@ -1,4 +1,5 @@
 void llspi_miso_dma(uint8_t *addr, int len) {
+<<<<<<< Updated upstream
   // disable DMA
   DMA2_Stream3->CR &= ~DMA_SxCR_EN;
   register_clear_bits(&(SPI1->CR2), SPI_CR2_TXDMAEN);
@@ -87,4 +88,16 @@ void llspi_init(void) {
 
   NVIC_EnableIRQ(DMA2_Stream2_IRQn);
   NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+=======
+  UNUSED(addr);
+  UNUSED(len);
+}
+
+void llspi_mosi_dma(uint8_t *addr, int len) {
+  UNUSED(addr);
+  UNUSED(len);
+}
+
+void llspi_init(void) {
+>>>>>>> Stashed changes
 }

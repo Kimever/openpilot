@@ -36,10 +36,17 @@ def test_hw_type(p):
 def test_heartbeat(p, panda_jungle):
   panda_jungle.set_ignition(True)
   # TODO: add more cases here once the tests aren't super slow
+<<<<<<< Updated upstream
   p.set_safety_mode(mode=Panda.SAFETY_HYUNDAI, param=Panda.FLAG_HYUNDAI_LONG)
   p.send_heartbeat()
   assert p.health()['safety_mode'] == Panda.SAFETY_HYUNDAI
   assert p.health()['safety_param'] == Panda.FLAG_HYUNDAI_LONG
+=======
+  p.set_safety_mode(mode=CarParams.SafetyModel.hyundai, param=HyundaiSafetyFlags.LONG)
+  p.send_heartbeat()
+  assert p.health()['safety_mode'] == CarParams.SafetyModel.hyundai
+  assert p.health()['safety_param'] == HyundaiSafetyFlags.LONG
+>>>>>>> Stashed changes
 
   # shouldn't do anything once we're in a car safety mode
   p.set_heartbeat_disabled()

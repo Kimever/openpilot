@@ -1,4 +1,12 @@
+<<<<<<< Updated upstream
 void gpio_usb_init(void) {
+=======
+#ifdef BOOTSTUB
+void gpio_usb_init(void) {
+#else
+static void gpio_usb_init(void) {
+#endif
+>>>>>>> Stashed changes
   // A11,A12: USB
   set_gpio_alternate(GPIOA, 11, GPIO_AF10_OTG_FS);
   set_gpio_alternate(GPIOA, 12, GPIO_AF10_OTG_FS);
@@ -6,6 +14,7 @@ void gpio_usb_init(void) {
 }
 
 void gpio_spi_init(void) {
+<<<<<<< Updated upstream
   // A4-A7: SPI
   set_gpio_alternate(GPIOA, 4, GPIO_AF5_SPI1);
   set_gpio_alternate(GPIOA, 5, GPIO_AF5_SPI1);
@@ -14,16 +23,28 @@ void gpio_spi_init(void) {
   register_set_bits(&(GPIOA->OSPEEDR), GPIO_OSPEEDER_OSPEEDR4 | GPIO_OSPEEDER_OSPEEDR5 | GPIO_OSPEEDER_OSPEEDR6 | GPIO_OSPEEDER_OSPEEDR7);
 }
 
+=======
+}
+
+#ifdef BOOTSTUB
+>>>>>>> Stashed changes
 void gpio_usart2_init(void) {
   // A2,A3: USART 2 for debugging
   set_gpio_alternate(GPIOA, 2, GPIO_AF7_USART2);
   set_gpio_alternate(GPIOA, 3, GPIO_AF7_USART2);
 }
+<<<<<<< Updated upstream
 
 // Common GPIO initialization
 void common_init_gpio(void) {
   // TODO: Is this block actually doing something???
   // pull low to hold ESP in reset??
+=======
+#endif
+
+// Common GPIO initialization
+void common_init_gpio(void) {
+>>>>>>> Stashed changes
   // enable OTG out tied to ground
   GPIOA->ODR = 0;
   GPIOB->ODR = 0;
@@ -41,12 +62,20 @@ void common_init_gpio(void) {
   set_gpio_alternate(GPIOB, 9, GPIO_AF8_CAN1);
 }
 
+<<<<<<< Updated upstream
+=======
+#ifdef BOOTSTUB
+>>>>>>> Stashed changes
 void flasher_peripherals_init(void) {
   RCC->AHB1ENR |= RCC_AHB1ENR_DMA2EN;
   RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
   RCC->AHB2ENR |= RCC_AHB2ENR_OTGFSEN;
   RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
 }
+<<<<<<< Updated upstream
+=======
+#endif
+>>>>>>> Stashed changes
 
 // Peripheral initialization
 void peripherals_init(void) {

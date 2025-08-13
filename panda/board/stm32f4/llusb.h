@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 USB_OTG_GlobalTypeDef *USBx = USB_OTG_FS;
 
 #define USBx_HOST       ((USB_OTG_HostTypeDef *)((uint32_t)USBx + USB_OTG_HOST_BASE))
@@ -14,6 +15,13 @@ USB_OTG_GlobalTypeDef *USBx = USB_OTG_FS;
 void usb_irqhandler(void);
 
 void OTG_FS_IRQ_Handler(void) {
+=======
+#include "llusb_declarations.h"
+
+USB_OTG_GlobalTypeDef *USBx = USB_OTG_FS;
+
+static void OTG_FS_IRQ_Handler(void) {
+>>>>>>> Stashed changes
   NVIC_DisableIRQ(OTG_FS_IRQn);
   //__disable_irq();
   usb_irqhandler();

@@ -1,5 +1,6 @@
 #pragma once
 
+<<<<<<< Updated upstream
 #include "crc.h"
 
 #define SPI_TIMEOUT_US 10000U
@@ -7,6 +8,10 @@
 // got max rate from hitting a non-existent endpoint
 // in a tight loop, plus some buffer
 #define SPI_IRQ_RATE  16000U
+=======
+#include "board/drivers/spi_declarations.h"
+#include "board/crc.h"
+>>>>>>> Stashed changes
 
 #ifdef STM32H7
 #define SPI_BUF_SIZE 2048U
@@ -19,6 +24,7 @@ uint8_t spi_buf_rx[SPI_BUF_SIZE];
 uint8_t spi_buf_tx[SPI_BUF_SIZE];
 #endif
 
+<<<<<<< Updated upstream
 #define SPI_CHECKSUM_START 0xABU
 #define SPI_SYNC_BYTE 0x5AU
 #define SPI_HACK 0x79U
@@ -57,6 +63,16 @@ void can_tx_comms_resume_spi(void) {
 }
 
 uint16_t spi_version_packet(uint8_t *out) {
+=======
+uint16_t spi_error_count = 0;
+
+static uint8_t spi_state = SPI_STATE_HEADER;
+static uint16_t spi_data_len_mosi;
+static bool spi_can_tx_ready = false;
+static const unsigned char version_text[] = "VERSION";
+
+static uint16_t spi_version_packet(uint8_t *out) {
+>>>>>>> Stashed changes
   // this protocol version request is a stable portion of
   // the panda's SPI protocol. its contents match that of the
   // panda USB descriptors and are sufficent to list/enumerate
@@ -109,7 +125,11 @@ void spi_init(void) {
   llspi_mosi_dma(spi_buf_rx, SPI_HEADER_SIZE);
 }
 
+<<<<<<< Updated upstream
 bool validate_checksum(const uint8_t *data, uint16_t len) {
+=======
+static bool validate_checksum(const uint8_t *data, uint16_t len) {
+>>>>>>> Stashed changes
   // TODO: can speed this up by casting the bulk to uint32_t and xor-ing the bytes afterwards
   uint8_t checksum = SPI_CHECKSUM_START;
   for(uint16_t i = 0U; i < len; i++){
@@ -122,6 +142,11 @@ void spi_rx_done(void) {
   uint16_t response_len = 0U;
   uint8_t next_rx_state = SPI_STATE_HEADER_NACK;
   bool checksum_valid = false;
+<<<<<<< Updated upstream
+=======
+  static uint8_t spi_endpoint;
+  static uint16_t spi_data_len_miso;
+>>>>>>> Stashed changes
 
   // parse header
   spi_endpoint = spi_buf_rx[1];
@@ -140,7 +165,13 @@ void spi_rx_done(void) {
       response_len = 1U;
     } else {
       // response: NACK and reset state machine
+<<<<<<< Updated upstream
       print("- incorrect header sync or checksum "); hexdump(spi_buf_rx, SPI_HEADER_SIZE);
+=======
+      #ifdef DEBUG_SPI
+        print("- incorrect header sync or checksum "); hexdump(spi_buf_rx, SPI_HEADER_SIZE);
+      #endif
+>>>>>>> Stashed changes
       spi_buf_tx[0] = SPI_NACK;
       next_rx_state = SPI_STATE_HEADER_NACK;
       response_len = 1U;
@@ -153,7 +184,11 @@ void spi_rx_done(void) {
       if (spi_endpoint == 0U) {
         if (spi_data_len_mosi >= sizeof(ControlPacket_t)) {
           ControlPacket_t ctrl = {0};
+<<<<<<< Updated upstream
           (void)memcpy(&ctrl, &spi_buf_rx[SPI_HEADER_SIZE], sizeof(ControlPacket_t));
+=======
+          (void)memcpy((uint8_t*)&ctrl, &spi_buf_rx[SPI_HEADER_SIZE], sizeof(ControlPacket_t));
+>>>>>>> Stashed changes
           response_len = comms_control_handler(&ctrl, &spi_buf_tx[3]);
           response_ack = true;
         } else {
@@ -183,21 +218,41 @@ void spi_rx_done(void) {
           print("SPI: did expect data for can_write\n");
         }
       } else if (spi_endpoint == 0xABU) {
+<<<<<<< Updated upstream
         // test endpoint, send max response length
         response_len = spi_data_len_miso;
         response_ack = true;
+=======
+        // test endpoint: mimics panda -> device transfer
+        response_len = spi_data_len_miso;
+        response_ack = true;
+      } else if (spi_endpoint == 0xACU) {
+        // test endpoint: mimics device -> panda transfer (with NACK)
+        response_ack = false;
+>>>>>>> Stashed changes
       } else {
         print("SPI: unexpected endpoint"); puth(spi_endpoint); print("\n");
       }
     } else {
       // Checksum was incorrect
       response_ack = false;
+<<<<<<< Updated upstream
       print("- incorrect data checksum ");
       puth4(spi_data_len_mosi);
       print("\n");
       hexdump(spi_buf_rx, SPI_HEADER_SIZE);
       hexdump(&(spi_buf_rx[SPI_HEADER_SIZE]), MIN(spi_data_len_mosi, 64));
       print("\n");
+=======
+      #ifdef DEBUG_SPI
+        print("- incorrect data checksum ");
+        puth4(spi_data_len_mosi);
+        print("\n");
+        hexdump(spi_buf_rx, SPI_HEADER_SIZE);
+        hexdump(&(spi_buf_rx[SPI_HEADER_SIZE]), MIN(spi_data_len_mosi, 64));
+        print("\n");
+      #endif
+>>>>>>> Stashed changes
     }
 
     if (!response_ack) {
@@ -234,8 +289,13 @@ void spi_rx_done(void) {
   llspi_miso_dma(spi_buf_tx, response_len);
 
   spi_state = next_rx_state;
+<<<<<<< Updated upstream
   if (!checksum_valid && (spi_checksum_error_count < UINT16_MAX)) {
     spi_checksum_error_count += 1U;
+=======
+  if (!checksum_valid && (spi_error_count < UINT16_MAX)) {
+    spi_error_count += 1U;
+>>>>>>> Stashed changes
   }
 }
 
@@ -258,3 +318,10 @@ void spi_tx_done(bool reset) {
     print("SPI: TX unexpected state: "); puth(spi_state); print("\n");
   }
 }
+<<<<<<< Updated upstream
+=======
+
+void can_tx_comms_resume_spi(void) {
+  spi_can_tx_ready = true;
+}
+>>>>>>> Stashed changes

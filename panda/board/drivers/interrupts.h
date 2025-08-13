@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 typedef struct interrupt {
   IRQn_Type irq_type;
   void (*handler)(void);
@@ -9,6 +10,9 @@ typedef struct interrupt {
 
 void interrupt_timer_init(void);
 uint32_t microsecond_timer_get(void);
+=======
+#include "interrupts_declarations.h"
+>>>>>>> Stashed changes
 
 void unused_interrupt_handler(void) {
   // Something is wrong if this handler is called!
@@ -18,6 +22,7 @@ void unused_interrupt_handler(void) {
 
 interrupt interrupts[NUM_INTERRUPTS];
 
+<<<<<<< Updated upstream
 #define REGISTER_INTERRUPT(irq_num, func_ptr, call_rate_max, rate_fault) \
   interrupts[irq_num].irq_type = (irq_num); \
   interrupts[irq_num].handler = (func_ptr);  \
@@ -35,6 +40,17 @@ uint32_t busy_time = 0U;
 float interrupt_load = 0.0f;
 
 void handle_interrupt(IRQn_Type irq_type){
+=======
+static bool check_interrupt_rate = false;
+
+static uint32_t idle_time = 0U;
+static uint32_t busy_time = 0U;
+float interrupt_load = 0.0f;
+
+void handle_interrupt(IRQn_Type irq_type){
+  static uint8_t interrupt_depth = 0U;
+  static uint32_t last_time = 0U;
+>>>>>>> Stashed changes
   ENTER_CRITICAL();
   if (interrupt_depth == 0U) {
     uint32_t time = microsecond_timer_get();

@@ -145,24 +145,18 @@ class Panda:
   SAFETY_HYUNDAI_CANFD = 28
 
   SERIAL_DEBUG = 0
-  SERIAL_ESP = 1
-  SERIAL_LIN1 = 2
-  SERIAL_LIN2 = 3
   SERIAL_SOM_DEBUG = 4
 
   USB_PIDS = (0xddee, 0xddcc)
   REQUEST_IN = usb1.ENDPOINT_IN | usb1.TYPE_VENDOR | usb1.RECIPIENT_DEVICE
   REQUEST_OUT = usb1.ENDPOINT_OUT | usb1.TYPE_VENDOR | usb1.RECIPIENT_DEVICE
 
+  # from https://github.com/commaai/openpilot/blob/103b4df18cbc38f4129555ab8b15824d1a672bdf/cereal/log.capnp#L648
   HW_TYPE_UNKNOWN = b'\x00'
-  HW_TYPE_WHITE_PANDA = b'\x01'
-  HW_TYPE_GREY_PANDA = b'\x02'
-  HW_TYPE_BLACK_PANDA = b'\x03'
-  HW_TYPE_PEDAL = b'\x04'
-  HW_TYPE_UNO = b'\x05'
+  HW_TYPE_WHITE = b'\x01'
+  HW_TYPE_BLACK = b'\x03'
   HW_TYPE_DOS = b'\x06'
   HW_TYPE_RED_PANDA = b'\x07'
-  HW_TYPE_RED_PANDA_V2 = b'\x08'
   HW_TYPE_TRES = b'\x09'
   HW_TYPE_CUATRO = b'\x0a'
 
@@ -172,17 +166,16 @@ class Panda:
   HEALTH_STRUCT = struct.Struct("<IIIIIIIIBBBBBHBBBHfBBHBHHB")
   CAN_HEALTH_STRUCT = struct.Struct("<BIBBBBBBBBIIIIIIIHHBBBIIII")
 
-  F4_DEVICES = [HW_TYPE_WHITE_PANDA, HW_TYPE_GREY_PANDA, HW_TYPE_BLACK_PANDA, HW_TYPE_UNO, HW_TYPE_DOS]
-  H7_DEVICES = [HW_TYPE_RED_PANDA, HW_TYPE_RED_PANDA_V2, HW_TYPE_TRES, HW_TYPE_CUATRO]
+  F4_DEVICES = [HW_TYPE_WHITE, HW_TYPE_BLACK, HW_TYPE_DOS, ]
+  H7_DEVICES = [HW_TYPE_RED_PANDA, HW_TYPE_TRES, HW_TYPE_CUATRO]
 
-  INTERNAL_DEVICES = (HW_TYPE_UNO, HW_TYPE_DOS, HW_TYPE_TRES, HW_TYPE_CUATRO)
-  HAS_OBD = (HW_TYPE_BLACK_PANDA, HW_TYPE_UNO, HW_TYPE_DOS, HW_TYPE_RED_PANDA, HW_TYPE_RED_PANDA_V2, HW_TYPE_TRES, HW_TYPE_CUATRO)
+  INTERNAL_DEVICES = (HW_TYPE_DOS, HW_TYPE_TRES, HW_TYPE_CUATRO)
+  DEPRECATED_DEVICES = (HW_TYPE_WHITE, HW_TYPE_BLACK)
 
   MAX_FAN_RPMs = {
-    HW_TYPE_UNO: 5100,
     HW_TYPE_DOS: 6500,
     HW_TYPE_TRES: 6600,
-    HW_TYPE_CUATRO: 6600,
+    HW_TYPE_CUATRO: 12500,
   }
 
   HARNESS_STATUS_NC = 0
@@ -303,6 +296,10 @@ class Panda:
     self.health_version, self.can_version, self.can_health_version = self.get_packets_versions()
     logging.debug("connected")
 
+    hw_type = self.get_type()
+    if hw_type in Panda.DEPRECATED_DEVICES:
+      print("WARNING: Using deprecated HW")
+
     # disable openpilot's heartbeat checks
     if self._disable_checks:
       self.set_heartbeat_disabled()
@@ -405,9 +402,10 @@ class Panda:
     return context, usb_handle, usb_serial, bootstub, bcd
 
   @classmethod
-  def list(cls):
+  def list(cls, usb_only: bool = False):
     ret = cls.usb_list()
-    ret += cls.spi_list()
+    if not usb_only:
+      ret += cls.spi_list()
     return list(set(ret))
 
   @classmethod
@@ -520,6 +518,10 @@ class Panda:
       logging.debug("flash: already up to date")
       return
 
+    hw_type = self.get_type()
+    if hw_type in Panda.DEPRECATED_DEVICES:
+      raise RuntimeError(f"HW type {hw_type.hex()} is deprecated and can no longer be flashed.")
+
     if not fn:
       fn = os.path.join(FW_PATH, self._mcu_type.config.app_fn)
     assert os.path.isfile(fn)
@@ -572,16 +574,16 @@ class Panda:
       dfu_list = PandaDFU.list()
     return True
 
-  @staticmethod
-  def wait_for_panda(serial: str | None, timeout: int) -> bool:
+  @classmethod
+  def wait_for_panda(cls, serial: str | None, timeout: int) -> bool:
     t_start = time.monotonic()
-    serials = Panda.list()
+    serials = cls.list()
     while (serial is None and len(serials) == 0) or (serial is not None and serial not in serials):
       logging.debug("waiting for panda...")
       time.sleep(0.1)
       if timeout is not None and (time.monotonic() - t_start) > timeout:
         return False
-      serials = Panda.list()
+      serials = cls.list()
     return True
 
   def up_to_date(self, fn=None) -> bool:
@@ -622,7 +624,7 @@ class Panda:
       "interrupt_load": a[18],
       "fan_power": a[19],
       "safety_rx_checks_invalid": a[20],
-      "spi_checksum_error_count": a[21],
+      "spi_error_count": a[21],
       "fan_stall_count": a[22],
       "sbu1_voltage_mV": a[23],
       "sbu2_voltage_mV": a[24],
@@ -719,9 +721,6 @@ class Panda:
 
     raise ValueError(f"unknown HW type: {hw_type}")
 
-  def has_obd(self):
-    return self.get_type() in Panda.HAS_OBD
-
   def is_internal(self):
     return self.get_type() in Panda.INTERNAL_DEVICES
 
@@ -760,6 +759,12 @@ class Panda:
 
   # ******************* configuration *******************
 
+<<<<<<< Updated upstream
+=======
+  def set_alternative_experience(self, alternative_experience):
+    self._handle.controlWrite(Panda.REQUEST_OUT, 0xdf, int(alternative_experience), 0, b'')
+
+>>>>>>> Stashed changes
   def set_power_save(self, power_save_enabled=0):
     self._handle.controlWrite(Panda.REQUEST_OUT, 0xe7, int(power_save_enabled), 0, b'')
 
@@ -876,6 +881,7 @@ class Panda:
       ret += self._handle.bulkWrite(2, struct.pack("B", port_number) + ln[i:i + 0x20])
     return ret
 
+<<<<<<< Updated upstream
   def serial_clear(self, port_number):
     """Clears all messages (tx and rx) from the specified internal uart
     ringbuffer as though it were drained.
@@ -886,6 +892,8 @@ class Panda:
     """
     self._handle.controlWrite(Panda.REQUEST_OUT, 0xf2, port_number, 0, b'')
 
+=======
+>>>>>>> Stashed changes
   def send_heartbeat(self, engaged=True):
     self._handle.controlWrite(Panda.REQUEST_OUT, 0xf3, engaged, 0, b'')
 
@@ -920,8 +928,12 @@ class Panda:
   def set_green_led(self, enabled):
     self._handle.controlWrite(Panda.REQUEST_OUT, 0xf7, int(enabled), 0, b'')
 
-  def set_clock_source_period(self, period):
-    self._handle.controlWrite(Panda.REQUEST_OUT, 0xe6, period, 0, b'')
+  # arr: timer period
+  # ccrN: channel N pulse length
+  def set_clock_source_timer_params(self, arr, ccr1, ccr2, ccr3):
+    param1 = ((ccr1 & 0xFF) << 8) | (ccr2 & 0xFF)
+    param2 = ((ccr3 & 0xFF) << 8) | (arr & 0xFF)
+    self._handle.controlWrite(Panda.REQUEST_OUT, 0xe6, param1, param2, b'')
 
   def force_relay_drive(self, intercept_relay_drive, ignition_relay_drive):
     self._handle.controlWrite(Panda.REQUEST_OUT, 0xc5, (int(intercept_relay_drive) | int(ignition_relay_drive) << 1), 0, b'')

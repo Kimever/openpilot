@@ -1,8 +1,5 @@
 # Welcome to panda
 
-![panda tests](https://github.com/commaai/panda/workflows/tests/badge.svg)
-![panda drivers](https://github.com/commaai/panda/workflows/drivers/badge.svg)
-
 panda speaks CAN and CAN FD, and it runs on [STM32F413](https://www.st.com/resource/en/reference_manual/rm0430-stm32f413423-advanced-armbased-32bit-mcus-stmicroelectronics.pdf) and [STM32H725](https://www.st.com/resource/en/reference_manual/rm0468-stm32h723733-stm32h725735-and-stm32h730-value-line-advanced-armbased-32bit-mcus-stmicroelectronics.pdf).
 
 ## Directory structure
@@ -12,7 +9,9 @@ panda speaks CAN and CAN FD, and it runs on [STM32F413](https://www.st.com/resou
 ├── board           # Code that runs on the STM32
 ├── drivers         # Drivers (not needed for use with Python)
 ├── python          # Python userspace library for interfacing with the panda
-├── tests           # Tests and helper programs for panda
+├── tests           # Tests for panda
+├── scripts         # Miscellaneous used for panda development and debugging
+├── examples        # Example scripts for using a panda in a car
 ```
 
 ## Safety Model
@@ -46,8 +45,8 @@ In addition, we run the [ruff linter](https://github.com/astral-sh/ruff) and [my
 
 ## Usage
 
-Setup dependencies:
 ```bash
+<<<<<<< Updated upstream
 # Ubuntu
 sudo apt-get install dfu-util gcc-arm-none-eabi python3-pip libffi-dev git
 
@@ -63,9 +62,16 @@ cd panda
 
 # install dependencies
 pip install -r requirements.txt
+=======
+git clone https://github.com/commaai/panda.git
+cd panda
 
-# install panda
-python setup.py install
+# setup your environment
+./setup.sh
+>>>>>>> Stashed changes
+
+# build fw + run the tests
+./test.sh
 ```
 
 See [the Panda class](https://github.com/commaai/panda/blob/master/python/__init__.py) for how to interact with the panda.
@@ -94,11 +100,13 @@ The panda jungle uses different udev rules. See [the repo](https://github.com/co
 
 ## Software interface support
 
-As a universal car interface, it should support every reasonable software interface.
-
 - [Python library](https://github.com/commaai/panda/tree/master/python)
+<<<<<<< Updated upstream
 - [C++ library](https://github.com/commaai/openpilot/tree/master/selfdrive/boardd)
 - [socketcan in kernel](https://github.com/commaai/panda/tree/master/drivers/linux) (alpha)
+=======
+- [C++ library](https://github.com/commaai/openpilot/tree/master/selfdrive/pandad)
+>>>>>>> Stashed changes
 
 ## Licensing
 

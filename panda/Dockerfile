@@ -1,5 +1,6 @@
 FROM ubuntu:24.04
 
+<<<<<<< Updated upstream
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH /tmp/openpilot:$PYTHONPATH
 
@@ -41,12 +42,24 @@ ENV LC_ALL en_US.UTF-8
 
 COPY requirements.txt /tmp/
 RUN pip3 install --break-system-packages --no-cache-dir -r /tmp/requirements.txt
+=======
+ENV WORKDIR=/tmp/panda/
+ENV PYTHONUNBUFFERED=1
+ENV PATH="$WORKDIR/.venv/bin:$PATH"
 
-ENV CPPCHECK_DIR=/tmp/cppcheck
-COPY tests/misra/install.sh /tmp/
-RUN /tmp/install.sh && rm -rf $CPPCHECK_DIR/.git/
-ENV SKIP_CPPCHECK_INSTALL=1
+WORKDIR $WORKDIR
 
+# deps install
+COPY pyproject.toml __init__.py setup.sh $WORKDIR
+RUN mkdir -p $WORKDIR/python/ && touch $WORKDIR/__init__.py
+RUN apt-get update && apt-get install -y --no-install-recommends sudo && DEBIAN_FRONTEND=noninteractive $WORKDIR/setup.sh
+>>>>>>> Stashed changes
+
+# second pass for the opendbc moving tag
+ARG CACHEBUST=1
+RUN DEBIAN_FRONTEND=noninteractive $WORKDIR/setup.sh
+
+<<<<<<< Updated upstream
 ENV CEREAL_REF="861144c136c91f70dcbc652c2ffe99f57440ad47"
 ENV OPENDBC_REF="e0d4be4a6215d44809718dc84efe1b9f0299ad63"
 
@@ -65,3 +78,7 @@ RUN mkdir -p /tmp/openpilot/ && \
 COPY README.md panda.tar.* /tmp/
 RUN mkdir /tmp/openpilot/panda && \
     tar -xvf /tmp/panda.tar.gz -C /tmp/openpilot/panda/ || true
+=======
+RUN git config --global --add safe.directory $WORKDIR/panda
+COPY . $WORKDIR
+>>>>>>> Stashed changes

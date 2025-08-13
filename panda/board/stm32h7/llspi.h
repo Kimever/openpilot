@@ -48,8 +48,14 @@ void llspi_miso_dma(uint8_t *addr, int len) {
   register_set_bits(&(SPI4->CR1), SPI_CR1_SPE);
 }
 
+<<<<<<< Updated upstream
 // master -> panda DMA finished
 void DMA2_Stream2_IRQ_Handler(void) {
+=======
+static bool spi_tx_dma_done = false;
+// master -> panda DMA finished
+static void DMA2_Stream2_IRQ_Handler(void) {
+>>>>>>> Stashed changes
   // Clear interrupt flag
   DMA2->LIFCR = DMA_LIFCR_CTCIF2;
 
@@ -57,7 +63,11 @@ void DMA2_Stream2_IRQ_Handler(void) {
 }
 
 // panda -> master DMA finished
+<<<<<<< Updated upstream
 void DMA2_Stream3_IRQ_Handler(void) {
+=======
+static void DMA2_Stream3_IRQ_Handler(void) {
+>>>>>>> Stashed changes
   ENTER_CRITICAL();
 
   DMA2->LIFCR = DMA_LIFCR_CTCIF3;
@@ -67,7 +77,11 @@ void DMA2_Stream3_IRQ_Handler(void) {
 }
 
 // panda TX finished
+<<<<<<< Updated upstream
 void SPI4_IRQ_Handler(void) {
+=======
+static void SPI4_IRQ_Handler(void) {
+>>>>>>> Stashed changes
   // clear flag
   SPI4->IFCR |= (0x1FFU << 3U);
 

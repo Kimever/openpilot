@@ -1,3 +1,13 @@
+<<<<<<< Updated upstream
+=======
+// from the linker script
+#ifdef STM32H7
+  #define APP_START_ADDRESS 0x8020000U
+#elif defined(STM32F4)
+  #define APP_START_ADDRESS 0x8004000U
+#endif
+
+>>>>>>> Stashed changes
 // flasher state variables
 uint32_t *prog_ptr = NULL;
 bool unlocked = false;
@@ -28,7 +38,11 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
         flash_unlock();
         resp[1] = 0xff;
       }
+<<<<<<< Updated upstream
       current_board->set_led(LED_GREEN, 1);
+=======
+      led_set(LED_GREEN, 1);
+>>>>>>> Stashed changes
       unlocked = true;
       prog_ptr = (uint32_t *)APP_START_ADDRESS;
       break;
@@ -105,14 +119,22 @@ int comms_can_read(uint8_t *data, uint32_t max_len) {
 void refresh_can_tx_slots_available(void) {}
 
 void comms_endpoint2_write(const uint8_t *data, uint32_t len) {
+<<<<<<< Updated upstream
   current_board->set_led(LED_RED, 0);
+=======
+  led_set(LED_RED, 0);
+>>>>>>> Stashed changes
   for (uint32_t i = 0; i < len/4; i++) {
     flash_write_word(prog_ptr, *(uint32_t*)(data+(i*4)));
 
     //*(uint64_t*)(&spi_tx_buf[0x30+(i*4)]) = *prog_ptr;
     prog_ptr++;
   }
+<<<<<<< Updated upstream
   current_board->set_led(LED_RED, 1);
+=======
+  led_set(LED_RED, 1);
+>>>>>>> Stashed changes
 }
 
 
@@ -125,26 +147,43 @@ void soft_flasher_start(void) {
 
   gpio_usart2_init();
   gpio_usb_init();
+<<<<<<< Updated upstream
 
   // enable USB
   usb_init();
 
   // enable SPI
+=======
+  led_init();
+
+  // enable comms
+  usb_init();
+>>>>>>> Stashed changes
   if (current_board->has_spi) {
     gpio_spi_init();
     spi_init();
   }
 
   // green LED on for flashing
+<<<<<<< Updated upstream
   current_board->set_led(LED_GREEN, 1);
+=======
+  led_set(LED_GREEN, 1);
+>>>>>>> Stashed changes
 
   enable_interrupts();
 
   for (;;) {
     // blink the green LED fast
+<<<<<<< Updated upstream
     current_board->set_led(LED_GREEN, 0);
     delay(500000);
     current_board->set_led(LED_GREEN, 1);
+=======
+    led_set(LED_GREEN, 0);
+    delay(500000);
+    led_set(LED_GREEN, 1);
+>>>>>>> Stashed changes
     delay(500000);
   }
 }

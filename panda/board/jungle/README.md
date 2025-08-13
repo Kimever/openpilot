@@ -10,8 +10,13 @@ To make the jungle usable without root permissions, you might need to setup udev
 On ubuntu, this should do the trick:
 ``` bash
 sudo tee /etc/udev/rules.d/12-panda_jungle.rules <<EOF
+<<<<<<< Updated upstream
 SUBSYSTEM=="usb", ATTRS{idVendor}=="bbaa", ATTRS{idProduct}=="ddcf", MODE="0666"
 SUBSYSTEM=="usb", ATTRS{idVendor}=="bbaa", ATTRS{idProduct}=="ddef", MODE="0666"
+=======
+SUBSYSTEM=="usb", ATTRS{idVendor}=="3801", ATTRS{idProduct}=="ddcf", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="3801", ATTRS{idProduct}=="ddef", MODE="0666"
+>>>>>>> Stashed changes
 EOF
 sudo udevadm control --reload-rules && sudo udevadm trigger
 ```

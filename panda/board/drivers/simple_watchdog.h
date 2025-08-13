@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 typedef struct simple_watchdog_state_t {
   uint32_t fault;
   uint32_t last_ts;
@@ -6,6 +7,11 @@ typedef struct simple_watchdog_state_t {
 
 simple_watchdog_state_t wd_state;
 
+=======
+#include "simple_watchdog_declarations.h"
+
+static simple_watchdog_state_t wd_state;
+>>>>>>> Stashed changes
 
 void simple_watchdog_kick(void) {
   uint32_t ts = microsecond_timer_get();

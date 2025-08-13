@@ -5,6 +5,19 @@ void delay(uint32_t a) {
   for (i = 0; i < a; i++);
 }
 
+<<<<<<< Updated upstream
+=======
+void assert_fatal(bool condition, const char *msg) {
+  if (!condition) {
+    print("ASSERT FAILED\n");
+    print(msg);
+    while (1) {
+      // hang
+    }
+  }
+}
+
+>>>>>>> Stashed changes
 // cppcheck-suppress misra-c2012-21.2
 void *memset(void *str, int c, unsigned int n) {
   uint8_t *s = str;
