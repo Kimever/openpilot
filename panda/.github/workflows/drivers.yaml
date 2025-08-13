@@ -1,15 +1,11 @@
 name: drivers
-on:
-  push:
-    branches:
-      - master
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   build_socketcan:
     name: socketcan build
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
@@ -20,9 +16,7 @@ jobs:
           cd drivers/linux
           make link
           make build
-
-          # FIXME: install doesn't work sometimes in GH Actions
-          #make install
+          make install
       - name: Print make log
         if: always()
         continue-on-error: true

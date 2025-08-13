@@ -1,12 +1,8 @@
-#pragma once
-
-#include "board_declarations.h"
-
 // ///////////////////// //
 // White Panda (STM32F4) //
 // ///////////////////// //
 
-static void white_enable_can_transceiver(uint8_t transceiver, bool enabled) {
+void white_enable_can_transceiver(uint8_t transceiver, bool enabled) {
   switch (transceiver){
     case 1U:
       set_gpio_output(GPIOC, 1, !enabled);
@@ -23,14 +19,14 @@ static void white_enable_can_transceiver(uint8_t transceiver, bool enabled) {
   }
 }
 
-static void white_enable_can_transceivers(bool enabled) {
+void white_enable_can_transceivers(bool enabled) {
   uint8_t t1 = enabled ? 1U : 2U;  // leave transceiver 1 enabled to detect CAN ignition
   for(uint8_t i=t1; i<=3U; i++) {
     white_enable_can_transceiver(i, enabled);
   }
 }
 
-static void white_set_led(uint8_t color, bool enabled) {
+void white_set_led(uint8_t color, bool enabled) {
   switch (color){
     case LED_RED:
       set_gpio_output(GPIOC, 9, !enabled);
@@ -46,7 +42,7 @@ static void white_set_led(uint8_t color, bool enabled) {
   }
 }
 
-static void white_set_usb_power_mode(uint8_t mode){
+void white_set_usb_power_mode(uint8_t mode){
   switch (mode) {
     case USB_POWER_CLIENT:
       // B2,A13: set client mode
@@ -69,7 +65,7 @@ static void white_set_usb_power_mode(uint8_t mode){
   }
 }
 
-static void white_set_can_mode(uint8_t mode){
+void white_set_can_mode(uint8_t mode){
   if (mode == CAN_MODE_NORMAL) {
     // B12,B13: disable GMLAN mode
     set_gpio_mode(GPIOB, 12, MODE_INPUT);
@@ -89,21 +85,21 @@ static void white_set_can_mode(uint8_t mode){
   }
 }
 
-static uint32_t white_read_voltage_mV(void){
+uint32_t white_read_voltage_mV(void){
   return adc_get_mV(12) * 11U;
 }
 
-static uint32_t white_read_current_mA(void){
+uint32_t white_read_current_mA(void){
   // This isn't in mA, but we're keeping it for backwards compatibility
   return adc_get_raw(13);
 }
 
-static bool white_check_ignition(void){
+bool white_check_ignition(void){
   // ignition is on PA1
   return !get_gpio_input(GPIOA, 1);
 }
 
-static void white_grey_init(void) {
+void white_grey_init(void) {
   common_init_gpio();
 
   // C3: current sense
@@ -178,13 +174,13 @@ static void white_grey_init(void) {
   set_gpio_output(GPIOC, 14, 0);
 }
 
-static void white_grey_init_bootloader(void) {
+void white_grey_init_bootloader(void) {
   // ESP/GPS off
   set_gpio_output(GPIOC, 5, 0);
   set_gpio_output(GPIOC, 14, 0);
 }
 
-static harness_configuration white_harness_config = {
+harness_configuration white_harness_config = {
   .has_harness = false
 };
 
@@ -195,7 +191,6 @@ board board_white = {
   .has_spi = false,
   .has_canfd = false,
   .fan_max_rpm = 0U,
-  .fan_max_pwm = 100U,
   .avdd_mV = 3300U,
   .fan_stall_recovery = false,
   .fan_enable_cooldown_time = 0U,
@@ -211,6 +206,5 @@ board board_white = {
   .set_fan_enabled = unused_set_fan_enabled,
   .set_ir_power = unused_set_ir_power,
   .set_siren = unused_set_siren,
-  .read_som_gpio = unused_read_som_gpio,
-  .set_amp_enabled = unused_set_amp_enabled
+  .read_som_gpio = unused_read_som_gpio
 };
