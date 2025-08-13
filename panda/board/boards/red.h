@@ -1,19 +1,12 @@
-<<<<<<< Updated upstream
-=======
 #pragma once
 
 #include "board_declarations.h"
 
->>>>>>> Stashed changes
 // ///////////////////////////// //
 // Red Panda (STM32H7) + Harness //
 // ///////////////////////////// //
 
-<<<<<<< Updated upstream
-void red_enable_can_transceiver(uint8_t transceiver, bool enabled) {
-=======
 static void red_enable_can_transceiver(uint8_t transceiver, bool enabled) {
->>>>>>> Stashed changes
   switch (transceiver) {
     case 1U:
       set_gpio_output(GPIOG, 11, !enabled);
@@ -32,8 +25,7 @@ static void red_enable_can_transceiver(uint8_t transceiver, bool enabled) {
   }
 }
 
-<<<<<<< Updated upstream
-void red_enable_can_transceivers(bool enabled) {
+static void red_enable_can_transceivers(bool enabled) {
   uint8_t main_bus = (harness.status == HARNESS_STATUS_FLIPPED) ? 3U : 1U;
   for (uint8_t i=1U; i<=4U; i++) {
     // Leave main CAN always on for CAN-based ignition detection
@@ -45,7 +37,7 @@ void red_enable_can_transceivers(bool enabled) {
   }
 }
 
-void red_set_led(uint8_t color, bool enabled) {
+static void red_set_led(uint8_t color, bool enabled) {
   switch (color) {
     case LED_RED:
       set_gpio_output(GPIOE, 4, !enabled);
@@ -61,10 +53,7 @@ void red_set_led(uint8_t color, bool enabled) {
   }
 }
 
-void red_set_can_mode(uint8_t mode) {
-=======
 static void red_set_can_mode(uint8_t mode) {
->>>>>>> Stashed changes
   red_enable_can_transceiver(2U, false);
   red_enable_can_transceiver(4U, false);
   switch (mode) {
@@ -106,17 +95,16 @@ static void red_set_can_mode(uint8_t mode) {
   }
 }
 
-<<<<<<< Updated upstream
-bool red_check_ignition(void) {
+static bool red_check_ignition(void) {
   // ignition is checked through harness
   return harness_check_ignition();
 }
 
-uint32_t red_read_voltage_mV(void){
+static uint32_t red_read_voltage_mV(void){
   return adc_get_mV(2) * 11U; // TODO: is this correct?
 }
 
-void red_init(void) {
+static void red_init(void) {
   common_init_gpio();
 
   //C10,C11 : OBD_SBU1_RELAY, OBD_SBU2_RELAY
@@ -130,15 +118,6 @@ void red_init(void) {
   set_gpio_mode(GPIOC, 11, MODE_OUTPUT);
   set_gpio_output(GPIOC, 11, 1);
 
-=======
-static uint32_t red_read_voltage_mV(void){
-  return adc_get_mV(&(const adc_signal_t) ADC_CHANNEL_DEFAULT(ADC1, 2)) * 11U;
-}
-
-static void red_init(void) {
-  common_init_gpio();
-
->>>>>>> Stashed changes
   // G11,B3,D7,B4: transceiver enable
   set_gpio_pullup(GPIOG, 11, PULL_NONE);
   set_gpio_mode(GPIOG, 11, MODE_OUTPUT);
@@ -161,7 +140,6 @@ static void red_init(void) {
   set_gpio_pullup(GPIOB, 14, PULL_UP);
   set_gpio_mode(GPIOB, 14, MODE_OUTPUT);
   set_gpio_output(GPIOB, 14, 1);
-<<<<<<< Updated upstream
 
   // Initialize harness
   harness_init();
@@ -179,13 +157,8 @@ static void red_init(void) {
   red_set_can_mode(CAN_MODE_NORMAL);
 }
 
-harness_configuration red_harness_config = {
-  .has_harness = true,
-=======
-}
-
 static harness_configuration red_harness_config = {
->>>>>>> Stashed changes
+  .has_harness = true,
   .GPIO_SBU1 = GPIOC,
   .GPIO_SBU2 = GPIOA,
   .GPIO_relay_SBU1 = GPIOC,
@@ -194,53 +167,33 @@ static harness_configuration red_harness_config = {
   .pin_SBU2 = 1,
   .pin_relay_SBU1 = 10,
   .pin_relay_SBU2 = 11,
-<<<<<<< Updated upstream
   .adc_channel_SBU1 = 4, //ADC12_INP4
   .adc_channel_SBU2 = 17 //ADC1_INP17
-=======
-  .adc_signal_SBU1 = ADC_CHANNEL_DEFAULT(ADC1, 4),
-  .adc_signal_SBU2 = ADC_CHANNEL_DEFAULT(ADC1, 17)
->>>>>>> Stashed changes
 };
 
 board board_red = {
   .set_bootkick = unused_set_bootkick,
   .harness_config = &red_harness_config,
-<<<<<<< Updated upstream
   .has_obd = true,
   .has_spi = false,
   .has_canfd = true,
   .fan_max_rpm = 0U,
-=======
-  .has_spi = false,
-  .fan_max_rpm = 0U,
   .fan_max_pwm = 100U,
->>>>>>> Stashed changes
   .avdd_mV = 3300U,
   .fan_stall_recovery = false,
   .fan_enable_cooldown_time = 0U,
   .init = red_init,
   .init_bootloader = unused_init_bootloader,
   .enable_can_transceiver = red_enable_can_transceiver,
-<<<<<<< Updated upstream
   .enable_can_transceivers = red_enable_can_transceivers,
   .set_led = red_set_led,
   .set_can_mode = red_set_can_mode,
   .check_ignition = red_check_ignition,
-=======
-  .led_GPIO = {GPIOE, GPIOE, GPIOE},
-  .led_pin = {4, 3, 2},
-  .set_can_mode = red_set_can_mode,
->>>>>>> Stashed changes
   .read_voltage_mV = red_read_voltage_mV,
   .read_current_mA = unused_read_current,
   .set_fan_enabled = unused_set_fan_enabled,
   .set_ir_power = unused_set_ir_power,
   .set_siren = unused_set_siren,
-<<<<<<< Updated upstream
-  .read_som_gpio = unused_read_som_gpio
-=======
   .read_som_gpio = unused_read_som_gpio,
   .set_amp_enabled = unused_set_amp_enabled
->>>>>>> Stashed changes
 };

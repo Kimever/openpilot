@@ -37,11 +37,7 @@ def test_loopback():
     incoming = jungle.can_recv()
     found = False
     for message in incoming:
-<<<<<<< Updated upstream
-      incomingAddress, _, incomingData, incomingBus = message
-=======
       incomingAddress, incomingData, incomingBus = message
->>>>>>> Stashed changes
       if incomingAddress == address and incomingData == data[::-1] and incomingBus == bus:
         found = True
         break

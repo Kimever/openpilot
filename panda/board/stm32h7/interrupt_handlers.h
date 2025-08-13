@@ -20,13 +20,10 @@ void DMA1_Stream4_IRQHandler(void) {handle_interrupt(DMA1_Stream4_IRQn);}
 void DMA1_Stream5_IRQHandler(void) {handle_interrupt(DMA1_Stream5_IRQn);}
 void DMA1_Stream6_IRQHandler(void) {handle_interrupt(DMA1_Stream6_IRQn);}
 void ADC_IRQHandler(void) {handle_interrupt(ADC_IRQn);}
-<<<<<<< Updated upstream
-=======
 void FDCAN1_IT0_IRQHandler(void) {handle_interrupt(FDCAN1_IT0_IRQn);}
 void FDCAN2_IT0_IRQHandler(void) {handle_interrupt(FDCAN2_IT0_IRQn);}
 void FDCAN1_IT1_IRQHandler(void) {handle_interrupt(FDCAN1_IT1_IRQn);}
 void FDCAN2_IT1_IRQHandler(void) {handle_interrupt(FDCAN2_IT1_IRQn);}
->>>>>>> Stashed changes
 void EXTI9_5_IRQHandler(void) {handle_interrupt(EXTI9_5_IRQn);}
 void TIM1_BRK_IRQHandler(void) {handle_interrupt(TIM1_BRK_IRQn);}
 void TIM1_UP_TIM10_IRQHandler(void) {handle_interrupt(TIM1_UP_TIM10_IRQn);}
@@ -51,16 +48,10 @@ void TIM8_UP_TIM13_IRQHandler(void) {handle_interrupt(TIM8_UP_TIM13_IRQn);}
 void TIM8_TRG_COM_TIM14_IRQHandler(void) {handle_interrupt(TIM8_TRG_COM_TIM14_IRQn);}
 void TIM8_CC_IRQHandler(void) {handle_interrupt(TIM8_CC_IRQn);}
 void DMA1_Stream7_IRQHandler(void) {handle_interrupt(DMA1_Stream7_IRQn);}
-<<<<<<< Updated upstream
-void TIM5_IRQHandler(void) {handle_interrupt(TIM5_IRQn);}
-void SPI3_IRQHandler(void) {handle_interrupt(SPI3_IRQn);}
-void SPI4_IRQHandler(void) {handle_interrupt(SPI4_IRQn);}
-=======
 void FMC_IRQHandler(void) {handle_interrupt(FMC_IRQn);}
 void SDMMC1_IRQHandler(void) {handle_interrupt(SDMMC1_IRQn);}
 void TIM5_IRQHandler(void) {handle_interrupt(TIM5_IRQn);}
 void SPI3_IRQHandler(void) {handle_interrupt(SPI3_IRQn);}
->>>>>>> Stashed changes
 void UART4_IRQHandler(void) {handle_interrupt(UART4_IRQn);}
 void UART5_IRQHandler(void) {handle_interrupt(UART5_IRQn);}
 void TIM6_DAC_IRQHandler(void) {handle_interrupt(TIM6_DAC_IRQn);}
@@ -70,35 +61,19 @@ void DMA2_Stream1_IRQHandler(void) {handle_interrupt(DMA2_Stream1_IRQn);}
 void DMA2_Stream2_IRQHandler(void) {handle_interrupt(DMA2_Stream2_IRQn);}
 void DMA2_Stream3_IRQHandler(void) {handle_interrupt(DMA2_Stream3_IRQn);}
 void DMA2_Stream4_IRQHandler(void) {handle_interrupt(DMA2_Stream4_IRQn);}
-<<<<<<< Updated upstream
-=======
 void ETH_IRQHandler(void) {handle_interrupt(ETH_IRQn);}
 void ETH_WKUP_IRQHandler(void) {handle_interrupt(ETH_WKUP_IRQn);}
 void FDCAN_CAL_IRQHandler(void) {handle_interrupt(FDCAN_CAL_IRQn);}
->>>>>>> Stashed changes
 void DMA2_Stream5_IRQHandler(void) {handle_interrupt(DMA2_Stream5_IRQn);}
 void DMA2_Stream6_IRQHandler(void) {handle_interrupt(DMA2_Stream6_IRQn);}
 void DMA2_Stream7_IRQHandler(void) {handle_interrupt(DMA2_Stream7_IRQn);}
 void USART6_IRQHandler(void) {handle_interrupt(USART6_IRQn);}
 void I2C3_EV_IRQHandler(void) {handle_interrupt(I2C3_EV_IRQn);}
 void I2C3_ER_IRQHandler(void) {handle_interrupt(I2C3_ER_IRQn);}
-<<<<<<< Updated upstream
-void FDCAN1_IT0_IRQHandler(void) {handle_interrupt(FDCAN1_IT0_IRQn);}
-void FDCAN1_IT1_IRQHandler(void) {handle_interrupt(FDCAN1_IT1_IRQn);}
-void FDCAN2_IT0_IRQHandler(void) {handle_interrupt(FDCAN2_IT0_IRQn);}
-void FDCAN2_IT1_IRQHandler(void) {handle_interrupt(FDCAN2_IT1_IRQn);}
-void FDCAN3_IT0_IRQHandler(void) {handle_interrupt(FDCAN3_IT0_IRQn);}
-void FDCAN3_IT1_IRQHandler(void) {handle_interrupt(FDCAN3_IT1_IRQn);}
-void FDCAN_CAL_IRQHandler(void) {handle_interrupt(FDCAN_CAL_IRQn);}
-=======
->>>>>>> Stashed changes
 void OTG_HS_EP1_OUT_IRQHandler(void) {handle_interrupt(OTG_HS_EP1_OUT_IRQn);}
 void OTG_HS_EP1_IN_IRQHandler(void) {handle_interrupt(OTG_HS_EP1_IN_IRQn);}
 void OTG_HS_WKUP_IRQHandler(void) {handle_interrupt(OTG_HS_WKUP_IRQn);}
 void OTG_HS_IRQHandler(void) {handle_interrupt(OTG_HS_IRQn);}
-<<<<<<< Updated upstream
-void UART7_IRQHandler(void) {handle_interrupt(UART7_IRQn);}
-=======
 void DCMI_PSSI_IRQHandler(void) {handle_interrupt(DCMI_PSSI_IRQn);}
 void CRYP_IRQHandler(void) {handle_interrupt(CRYP_IRQn);}
 void HASH_RNG_IRQHandler(void) {handle_interrupt(HASH_RNG_IRQn);}
@@ -166,4 +141,3 @@ void FDCAN3_IT0_IRQHandler(void) {handle_interrupt(FDCAN3_IT0_IRQn);}
 void FDCAN3_IT1_IRQHandler(void) {handle_interrupt(FDCAN3_IT1_IRQn);}
 void TIM23_IRQHandler(void) {handle_interrupt(TIM23_IRQn);}
 void TIM24_IRQHandler(void) {handle_interrupt(TIM24_IRQn);}
->>>>>>> Stashed changes

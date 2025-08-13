@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-<<<<<<< Updated upstream
-
-import time
-from panda import PandaJungle
-
-=======
 import time
 import re
 from panda import PandaJungle
@@ -20,15 +14,10 @@ def colorize_errors(value):
       return f'{RED}{value}\033[0m'
   return str(value)
 
->>>>>>> Stashed changes
 if __name__ == "__main__":
   jungle = PandaJungle()
 
   while True:
-<<<<<<< Updated upstream
-    for bus in range(3):
-      print(bus, jungle.can_health(bus))
-=======
     print(chr(27) + "[2J") # clear screen
     print("Connected to " + ("internal panda" if jungle.is_internal() else "External panda") + f" id: {jungle.get_serial()[0]}: {jungle.get_version()}")
     for bus in range(3):
@@ -36,6 +25,5 @@ if __name__ == "__main__":
       health = jungle.can_health(bus)
       for key, value in health.items():
         print(f"{key}: {colorize_errors(value)}  ", end=" ")
->>>>>>> Stashed changes
     print()
     time.sleep(1)

@@ -5,10 +5,6 @@ import contextlib
 import random
 from termcolor import cprint
 
-<<<<<<< Updated upstream
-=======
-from opendbc.car.structs import CarParams
->>>>>>> Stashed changes
 from panda import Panda, PandaJungle
 
 NUM_PANDAS_PER_TEST = 1
@@ -78,19 +74,11 @@ def can_loopback(sender):
         raise Exception("Amount of received CAN messages (" + str(len(content)) + ") does not equal 1. Bus: " + str(bus) +" OBD: " + str(obd))
 
       # Check content
-<<<<<<< Updated upstream
-      if content[0][0] != addr or content[0][2] != string:
-        raise Exception("Received CAN message content or address does not match")
-
-      # Check bus
-      if content[0][3] != bus:
-=======
       if content[0][0] != addr or content[0][1] != string:
         raise Exception("Received CAN message content or address does not match")
 
       # Check bus
       if content[0][2] != bus:
->>>>>>> Stashed changes
         raise Exception("Received CAN message bus does not match")
 
 #################################################################
@@ -100,11 +88,7 @@ def can_loopback(sender):
 def test_loopback():
   # disable safety modes
   for panda in pandas:
-<<<<<<< Updated upstream
     panda.set_safety_mode(Panda.SAFETY_ELM327 if FOR_RELEASE_BUILDS else Panda.SAFETY_ALLOUTPUT)
-=======
-    panda.set_safety_mode(CarParams.SafetyModel.elm327 if FOR_RELEASE_BUILDS else CarParams.SafetyModel.allOutput)
->>>>>>> Stashed changes
 
   # perform loopback with jungle as a sender
   can_loopback(jungle)
@@ -115,11 +99,7 @@ def test_loopback():
 
   # enable safety modes
   for panda in pandas:
-<<<<<<< Updated upstream
     panda.set_safety_mode(Panda.SAFETY_SILENT)
-=======
-    panda.set_safety_mode(CarParams.SafetyModel.silent)
->>>>>>> Stashed changes
 
 #################################################################
 ############################# MAIN ##############################

@@ -7,10 +7,7 @@
 
 #define CANFD
 #define ALLOW_DEBUG
-<<<<<<< Updated upstream
 #define PANDA
-=======
->>>>>>> Stashed changes
 
 #define ENTER_CRITICAL() 0
 #define EXIT_CRITICAL() 0
@@ -34,8 +31,3 @@ uint32_t microsecond_timer_get(void);
 uint32_t microsecond_timer_get(void) {
   return MICROSECOND_TIMER->CNT;
 }
-<<<<<<< Updated upstream
-=======
-
-typedef uint32_t GPIO_TypeDef;
->>>>>>> Stashed changes

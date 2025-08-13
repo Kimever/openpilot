@@ -1,17 +1,7 @@
-<<<<<<< Updated upstream
 #include "stm32f4/inc/stm32f4xx.h"
 #include "stm32f4/inc/stm32f4xx_hal_gpio_ex.h"
 #define MCU_IDCODE 0x463U
 
-// from the linker script
-#define APP_START_ADDRESS 0x8004000U
-
-=======
-#include "stm32f4xx.h"
-#include "stm32f4xx_hal_gpio_ex.h"
-#define MCU_IDCODE 0x463U
-
->>>>>>> Stashed changes
 #define CORE_FREQ 96U // in MHz
 #define APB1_FREQ (CORE_FREQ/2U)
 #define APB1_TIMER_FREQ (APB1_FREQ*2U)  // APB1 is multiplied by 2 for the timer peripherals
@@ -40,12 +30,11 @@
 #define PROVISION_CHUNK_ADDRESS 0x1FFF79E0U
 #define DEVICE_SERIAL_NUMBER_ADDRESS 0x1FFF79C0U
 
-<<<<<<< Updated upstream
-#include "can_definitions.h"
+#include "can.h"
 #include "comms_definitions.h"
 
 #ifndef BOOTSTUB
-  #include "main_declarations.h"
+  #include "main_definitions.h"
 #else
   #include "bootstub_declarations.h"
 #endif
@@ -80,57 +69,11 @@
 #endif
 
 #include "stm32f4/llusb.h"
-=======
-#include "board/can.h"
-#include "board/comms_definitions.h"
-
-#ifndef BOOTSTUB
-  #include "board/main_definitions.h"
-#else
-  #include "board/bootstub_declarations.h"
-#endif
-
-#include "board/libc.h"
-#include "board/critical.h"
-#include "board/faults.h"
-#include "board/utils.h"
-
-#include "board/drivers/registers.h"
-#include "board/drivers/interrupts.h"
-#include "board/drivers/gpio.h"
-#include "board/stm32f4/peripherals.h"
-#include "board/stm32f4/interrupt_handlers.h"
-#include "board/drivers/timers.h"
-#include "board/stm32f4/board.h"
-#include "board/stm32f4/clock.h"
-
-#if !defined(BOOTSTUB)
-  #include "board/drivers/uart.h"
-  #include "board/stm32f4/lluart.h"
-#endif
-
-#ifdef BOOTSTUB
-  #include "board/stm32f4/llflash.h"
-#else
-  #include "board/stm32f4/llbxcan.h"
-#endif
-
-#include "board/stm32f4/llusb.h"
-
-// unused
-void spi_init(void) {};
-void sound_tick(void) {};
-void can_tx_comms_resume_spi(void) {};
->>>>>>> Stashed changes
 
 void early_gpio_float(void) {
   RCC->AHB1ENR = RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOCEN;
 
-<<<<<<< Updated upstream
   GPIOA->MODER = 0; GPIOB->MODER = 0; GPIOC->MODER = 0;
-=======
-  GPIOB->MODER = 0; GPIOC->MODER = 0;
->>>>>>> Stashed changes
   GPIOA->ODR = 0; GPIOB->ODR = 0; GPIOC->ODR = 0;
   GPIOA->PUPDR = 0; GPIOB->PUPDR = 0; GPIOC->PUPDR = 0;
 }

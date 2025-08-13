@@ -1,5 +1,8 @@
 # Welcome to panda
 
+![panda tests](https://github.com/commaai/panda/workflows/tests/badge.svg)
+![panda drivers](https://github.com/commaai/panda/workflows/drivers/badge.svg)
+
 panda speaks CAN and CAN FD, and it runs on [STM32F413](https://www.st.com/resource/en/reference_manual/rm0430-stm32f413423-advanced-armbased-32bit-mcus-stmicroelectronics.pdf) and [STM32H725](https://www.st.com/resource/en/reference_manual/rm0468-stm32h723733-stm32h725735-and-stm32h730-value-line-advanced-armbased-32bit-mcus-stmicroelectronics.pdf).
 
 ## Directory structure
@@ -9,9 +12,7 @@ panda speaks CAN and CAN FD, and it runs on [STM32F413](https://www.st.com/resou
 ├── board           # Code that runs on the STM32
 ├── drivers         # Drivers (not needed for use with Python)
 ├── python          # Python userspace library for interfacing with the panda
-├── tests           # Tests for panda
-├── scripts         # Miscellaneous used for panda development and debugging
-├── examples        # Example scripts for using a panda in a car
+├── tests           # Tests and helper programs for panda
 ```
 
 ## Safety Model
@@ -22,7 +23,7 @@ Safety modes optionally support `controls_allowed`, which allows or blocks a sub
 
 ## Code Rigor
 
-The panda firmware is written for its use in conjuction with [openpilot](https://github.com/commaai/openpilot). The panda firmware, through its safety model, provides and enforces the
+The panda firmware is written for its use in conjunction with [openpilot](https://github.com/commaai/openpilot). The panda firmware, through its safety model, provides and enforces the
 [openpilot safety](https://github.com/commaai/openpilot/blob/master/docs/SAFETY.md). Due to its critical function, it's important that the application code rigor within the `board` folder is held to high standards.
 
 These are the [CI regression tests](https://github.com/commaai/panda/actions) we have in place:
@@ -45,10 +46,10 @@ In addition, we run the [ruff linter](https://github.com/astral-sh/ruff) and [my
 
 ## Usage
 
+Setup dependencies:
 ```bash
-<<<<<<< Updated upstream
 # Ubuntu
-sudo apt-get install dfu-util gcc-arm-none-eabi python3-pip libffi-dev git
+sudo apt-get install dfu-util gcc-arm-none-eabi python3-pip libffi-dev git clang-17
 
 # macOS
 brew install --cask gcc-arm-embedded
@@ -61,17 +62,10 @@ git clone https://github.com/commaai/panda.git
 cd panda
 
 # install dependencies
-pip install -r requirements.txt
-=======
-git clone https://github.com/commaai/panda.git
-cd panda
+pip install -e .[dev]
 
-# setup your environment
-./setup.sh
->>>>>>> Stashed changes
-
-# build fw + run the tests
-./test.sh
+# install panda
+python setup.py install
 ```
 
 See [the Panda class](https://github.com/commaai/panda/blob/master/python/__init__.py) for how to interact with the panda.
@@ -90,8 +84,8 @@ And to send one on bus 0:
 Note that you may have to setup [udev rules](https://github.com/commaai/panda/tree/master/drivers/linux) for Linux, such as
 ``` bash
 sudo tee /etc/udev/rules.d/11-panda.rules <<EOF
-SUBSYSTEM=="usb", ATTRS{idVendor}=="bbaa", ATTRS{idProduct}=="ddcc", MODE="0666"
-SUBSYSTEM=="usb", ATTRS{idVendor}=="bbaa", ATTRS{idProduct}=="ddee", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="3801", ATTRS{idProduct}=="ddcc", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="3801", ATTRS{idProduct}=="ddee", MODE="0666"
 EOF
 sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
@@ -100,13 +94,11 @@ The panda jungle uses different udev rules. See [the repo](https://github.com/co
 
 ## Software interface support
 
+As a universal car interface, it should support every reasonable software interface.
+
 - [Python library](https://github.com/commaai/panda/tree/master/python)
-<<<<<<< Updated upstream
-- [C++ library](https://github.com/commaai/openpilot/tree/master/selfdrive/boardd)
-- [socketcan in kernel](https://github.com/commaai/panda/tree/master/drivers/linux) (alpha)
-=======
 - [C++ library](https://github.com/commaai/openpilot/tree/master/selfdrive/pandad)
->>>>>>> Stashed changes
+- [socketcan in kernel](https://github.com/commaai/panda/tree/master/drivers/linux) (alpha)
 
 ## Licensing
 

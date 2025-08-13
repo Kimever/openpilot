@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-void uart_rx_ring(uart_ring *q){
-=======
 static void uart_rx_ring(uart_ring *q){
->>>>>>> Stashed changes
   // Do not read out directly if DMA enabled
   ENTER_CRITICAL();
 
@@ -48,7 +44,6 @@ void uart_tx_ring(uart_ring *q){
   EXIT_CRITICAL();
 }
 
-<<<<<<< Updated upstream
 void uart_set_baud(USART_TypeDef *u, unsigned int baud) {
   // UART7 is connected to APB1 at 60MHz
   u->BRR = 60000000U / baud;
@@ -57,13 +52,7 @@ void uart_set_baud(USART_TypeDef *u, unsigned int baud) {
 // This read after reading ISR clears all error interrupts. We don't want compiler warnings, nor optimizations
 #define UART_READ_RDR(uart) volatile uint8_t t = (uart)->RDR; UNUSED(t);
 
-void uart_interrupt_handler(uart_ring *q) {
-=======
-// This read after reading ISR clears all error interrupts. We don't want compiler warnings, nor optimizations
-#define UART_READ_RDR(uart) volatile uint8_t t = (uart)->RDR; UNUSED(t);
-
 static void uart_interrupt_handler(uart_ring *q) {
->>>>>>> Stashed changes
   ENTER_CRITICAL();
 
   // Read UART status. This is also the first step necessary in clearing most interrupts
@@ -99,24 +88,13 @@ static void uart_interrupt_handler(uart_ring *q) {
   EXIT_CRITICAL();
 }
 
-<<<<<<< Updated upstream
-void UART7_IRQ_Handler(void) { uart_interrupt_handler(&uart_ring_som_debug); }
+static void UART7_IRQ_Handler(void) { uart_interrupt_handler(&uart_ring_som_debug); }
 
 void uart_init(uart_ring *q, int baud) {
   if (q->uart == UART7) {
     REGISTER_INTERRUPT(UART7_IRQn, UART7_IRQ_Handler, 150000U, FAULT_INTERRUPT_RATE_UART_7)
 
     uart_set_baud(q->uart, baud);
-=======
-static void UART7_IRQ_Handler(void) { uart_interrupt_handler(&uart_ring_som_debug); }
-
-void uart_init(uart_ring *q, unsigned int baud) {
-  if (q->uart == UART7) {
-    REGISTER_INTERRUPT(UART7_IRQn, UART7_IRQ_Handler, 150000U, FAULT_INTERRUPT_RATE_UART_7)
-
-    // UART7 is connected to APB1 at 60MHz
-    q->uart->BRR = 60000000U / baud;
->>>>>>> Stashed changes
     q->uart->CR1 = USART_CR1_UE | USART_CR1_TE | USART_CR1_RE;
 
     // Enable interrupt on RX not empty

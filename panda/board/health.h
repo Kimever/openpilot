@@ -23,11 +23,7 @@ struct __attribute__((packed)) health_t {
   float interrupt_load_pkt;
   uint8_t fan_power;
   uint8_t safety_rx_checks_invalid_pkt;
-<<<<<<< Updated upstream
   uint16_t spi_checksum_error_count_pkt;
-=======
-  uint16_t spi_error_count_pkt;
->>>>>>> Stashed changes
   uint8_t fan_stall_count;
   uint16_t sbu1_voltage_mV;
   uint16_t sbu2_voltage_mV;

@@ -8,7 +8,6 @@ AddOption('--ubsan',
           action='store_true',
           help='turn on UBSan')
 
-<<<<<<< Updated upstream
 AddOption('--coverage',
           action='store_true',
           help='build with test coverage options')
@@ -17,20 +16,13 @@ AddOption('--compile_db',
           action='store_true',
           help='build clang compilation database')
 
-=======
->>>>>>> Stashed changes
 env = Environment(
   COMPILATIONDB_USE_ABSPATH=True,
   tools=["default", "compilation_db"],
 )
-<<<<<<< Updated upstream
   
 if GetOption('compile_db'):
     env.CompilationDatabase("compile_commands.json")
-=======
-
-env.CompilationDatabase("compile_commands.json")
->>>>>>> Stashed changes
 
 # panda fw & test files
 SConscript('SConscript')

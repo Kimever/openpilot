@@ -1,33 +1,8 @@
-<<<<<<< Updated upstream
-// IRQs: FDCAN1_IT0, FDCAN1_IT1
-//       FDCAN2_IT0, FDCAN2_IT1
-//       FDCAN3_IT0, FDCAN3_IT1
-
-#define CANFD
-
-typedef struct {
-  volatile uint32_t header[2];
-  volatile uint32_t data_word[CANPACKET_DATA_SIZE_MAX/4U];
-} canfd_fifo;
-
-FDCAN_GlobalTypeDef *cans[] = {FDCAN1, FDCAN2, FDCAN3};
-
-uint8_t can_irq_number[3][2] = {
-  { FDCAN1_IT0_IRQn, FDCAN1_IT1_IRQn },
-  { FDCAN2_IT0_IRQn, FDCAN2_IT1_IRQn },
-  { FDCAN3_IT0_IRQn, FDCAN3_IT1_IRQn },
-};
-
-#define CAN_ACK_ERROR 3U
-
-bool can_set_speed(uint8_t can_number) {
-=======
 #include "fdcan_declarations.h"
 
 FDCAN_GlobalTypeDef *cans[CANS_ARRAY_SIZE] = {FDCAN1, FDCAN2, FDCAN3};
 
 static bool can_set_speed(uint8_t can_number) {
->>>>>>> Stashed changes
   bool ret = true;
   FDCAN_GlobalTypeDef *FDCANx = CANIF_FROM_CAN_NUM(can_number);
   uint8_t bus_number = BUS_NUM_FROM_CAN_NUM(can_number);
@@ -43,20 +18,10 @@ static bool can_set_speed(uint8_t can_number) {
   return ret;
 }
 
-<<<<<<< Updated upstream
-void update_can_health_pkt(uint8_t can_number, uint32_t ir_reg) {
-=======
 void can_clear_send(FDCAN_GlobalTypeDef *FDCANx, uint8_t can_number) {
-  static uint32_t last_reset = 0U;
-  uint32_t time = microsecond_timer_get();
-
-  // Resetting CAN core is a slow blocking operation, limit frequency
-  if (get_ts_elapsed(time, last_reset) > 100000U) {  // 10 Hz
-    can_health[can_number].can_core_reset_cnt += 1U;
-    can_health[can_number].total_tx_lost_cnt += (FDCAN_TX_FIFO_EL_CNT - (FDCANx->TXFQS & FDCAN_TXFQS_TFFL)); // TX FIFO msgs will be lost after reset
-    llcan_clear_send(FDCANx);
-    last_reset = time;
-  }
+  can_health[can_number].can_core_reset_cnt += 1U;
+  can_health[can_number].total_tx_lost_cnt += (FDCAN_TX_FIFO_EL_CNT - (FDCANx->TXFQS & FDCAN_TXFQS_TFFL)); // TX FIFO msgs will be lost after reset
+  llcan_clear_send(FDCANx);
 }
 
 void update_can_health_pkt(uint8_t can_number, uint32_t ir_reg) {
@@ -66,7 +31,6 @@ void update_can_health_pkt(uint8_t can_number, uint32_t ir_reg) {
     { FDCAN3_IT0_IRQn, FDCAN3_IT1_IRQn },
   };
 
->>>>>>> Stashed changes
   FDCAN_GlobalTypeDef *FDCANx = CANIF_FROM_CAN_NUM(can_number);
   uint32_t psr_reg = FDCANx->PSR;
   uint32_t ecr_reg = FDCANx->ECR;
@@ -106,13 +70,7 @@ void update_can_health_pkt(uint8_t can_number, uint32_t ir_reg) {
     // 2. H7 gets stuck in bus off recovery state indefinitely
     if ((((can_health[can_number].last_error == CAN_ACK_ERROR) || (can_health[can_number].last_data_error == CAN_ACK_ERROR)) && (can_health[can_number].transmit_error_cnt > 127U)) ||
      ((ir_reg & FDCAN_IR_BO) != 0U)) {
-<<<<<<< Updated upstream
-      can_health[can_number].can_core_reset_cnt += 1U;
-      can_health[can_number].total_tx_lost_cnt += (FDCAN_TX_FIFO_EL_CNT - (FDCANx->TXFQS & FDCAN_TXFQS_TFFL)); // TX FIFO msgs will be lost after reset
-      llcan_clear_send(FDCANx);
-=======
       can_clear_send(FDCANx, can_number);
->>>>>>> Stashed changes
     }
   }
 }
@@ -142,15 +100,11 @@ void process_can(uint8_t can_number) {
           fifo = (canfd_fifo *)(TxFIFOSA + (tx_index * FDCAN_TX_FIFO_EL_SIZE));
 
           fifo->header[0] = (to_send.extended << 30) | ((to_send.extended != 0U) ? (to_send.addr) : (to_send.addr << 18));
-<<<<<<< Updated upstream
-          uint32_t canfd_enabled_header = bus_config[can_number].canfd_enabled ? (1UL << 21) : 0UL;
-=======
 
           // If canfd_auto is set, outgoing packets will be automatically sent as CAN-FD if an incoming CAN-FD packet was seen
           bool fd = bus_config[can_number].canfd_auto ? bus_config[can_number].canfd_enabled : (bool)(to_send.fd > 0U);
           uint32_t canfd_enabled_header = fd ? (1UL << 21) : 0UL;
 
->>>>>>> Stashed changes
           uint32_t brs_enabled_header = bus_config[can_number].brs_enabled ? (1UL << 20) : 0UL;
           fifo->header[1] = (to_send.data_len_code << 16) | canfd_enabled_header | brs_enabled_header;
 
@@ -165,10 +119,7 @@ void process_can(uint8_t can_number) {
           // Send back to USB
           CANPacket_t to_push;
 
-<<<<<<< Updated upstream
-=======
           to_push.fd = fd;
->>>>>>> Stashed changes
           to_push.returned = 1U;
           to_push.rejected = 0U;
           to_push.extended = to_send.extended;
@@ -222,13 +173,10 @@ void can_rx(uint8_t can_number) {
     // getting address
     fifo = (canfd_fifo *)(RxFIFO0SA + (rx_fifo_idx * FDCAN_RX_FIFO_0_EL_SIZE));
 
-<<<<<<< Updated upstream
-=======
     bool canfd_frame = ((fifo->header[1] >> 21) & 0x1U);
     bool brs_frame = ((fifo->header[1] >> 20) & 0x1U);
 
     to_push.fd = canfd_frame;
->>>>>>> Stashed changes
     to_push.returned = 0U;
     to_push.rejected = 0U;
     to_push.extended = (fifo->header[0] >> 30) & 0x1U;
@@ -236,12 +184,6 @@ void can_rx(uint8_t can_number) {
     to_push.bus = bus_number;
     to_push.data_len_code = ((fifo->header[1] >> 16) & 0xFU);
 
-<<<<<<< Updated upstream
-    bool canfd_frame = ((fifo->header[1] >> 21) & 0x1U);
-    bool brs_frame = ((fifo->header[1] >> 20) & 0x1U);
-
-=======
->>>>>>> Stashed changes
     uint8_t data_len_w = (dlc_to_len[to_push.data_len_code] / 4U);
     data_len_w += ((dlc_to_len[to_push.data_len_code] % 4U) > 0U) ? 1U : 0U;
     for (unsigned int i = 0; i < data_len_w; i++) {
@@ -257,10 +199,7 @@ void can_rx(uint8_t can_number) {
     if (bus_fwd_num != -1) {
       CANPacket_t to_send;
 
-<<<<<<< Updated upstream
-=======
       to_send.fd = to_push.fd;
->>>>>>> Stashed changes
       to_send.returned = 0U;
       to_send.rejected = 0U;
       to_send.extended = to_push.extended;
@@ -277,11 +216,7 @@ void can_rx(uint8_t can_number) {
     safety_rx_invalid += safety_rx_hook(&to_push) ? 0U : 1U;
     ignition_can_hook(&to_push);
 
-<<<<<<< Updated upstream
     current_board->set_led(LED_BLUE, true);
-=======
-    led_set(LED_BLUE, true);
->>>>>>> Stashed changes
     rx_buffer_overflow += can_push(&can_rx_q, &to_push) ? 0U : 1U;
 
     // Enable CAN FD and BRS if CAN FD message was received
@@ -302,16 +237,6 @@ void can_rx(uint8_t can_number) {
   }
 }
 
-<<<<<<< Updated upstream
-void FDCAN1_IT0_IRQ_Handler(void) { can_rx(0); }
-void FDCAN1_IT1_IRQ_Handler(void) { process_can(0); }
-
-void FDCAN2_IT0_IRQ_Handler(void) { can_rx(1); }
-void FDCAN2_IT1_IRQ_Handler(void) { process_can(1); }
-
-void FDCAN3_IT0_IRQ_Handler(void) { can_rx(2);  }
-void FDCAN3_IT1_IRQ_Handler(void) { process_can(2); }
-=======
 static void FDCAN1_IT0_IRQ_Handler(void) { can_rx(0); }
 static void FDCAN1_IT1_IRQ_Handler(void) { process_can(0); }
 
@@ -320,7 +245,6 @@ static void FDCAN2_IT1_IRQ_Handler(void) { process_can(1); }
 
 static void FDCAN3_IT0_IRQ_Handler(void) { can_rx(2);  }
 static void FDCAN3_IT1_IRQ_Handler(void) { process_can(2); }
->>>>>>> Stashed changes
 
 bool can_init(uint8_t can_number) {
   bool ret = false;

@@ -1,28 +1,6 @@
-<<<<<<< Updated upstream
-// IRQs: USART2, USART3, UART5
-
-// ***************************** Definitions *****************************
-#define FIFO_SIZE_INT 0x400U
-
-typedef struct uart_ring {
-  volatile uint16_t w_ptr_tx;
-  volatile uint16_t r_ptr_tx;
-  uint8_t *elems_tx;
-  uint32_t tx_fifo_size;
-  volatile uint16_t w_ptr_rx;
-  volatile uint16_t r_ptr_rx;
-  uint8_t *elems_rx;
-  uint32_t rx_fifo_size;
-  USART_TypeDef *uart;
-  void (*callback)(struct uart_ring*);
-  bool overwrite;
-} uart_ring;
-
-#define UART_BUFFER(x, size_rx, size_tx, uart_ptr, callback_ptr, overwrite_mode) \
-  uint8_t elems_rx_##x[size_rx]; \
-  uint8_t elems_tx_##x[size_tx]; \
-=======
 #include "uart_declarations.h"
+
+// IRQs: USART2, USART3, UART5
 
 // ***************************** Definitions *****************************
 
@@ -30,7 +8,6 @@ typedef struct uart_ring {
   static uint8_t elems_rx_##x[size_rx]; \
   static uint8_t elems_tx_##x[size_tx]; \
   extern uart_ring uart_ring_##x; \
->>>>>>> Stashed changes
   uart_ring uart_ring_##x = {  \
     .w_ptr_tx = 0, \
     .r_ptr_tx = 0, \
@@ -45,14 +22,6 @@ typedef struct uart_ring {
     .overwrite = (overwrite_mode) \
   };
 
-<<<<<<< Updated upstream
-// ***************************** Function prototypes *****************************
-void debug_ring_callback(uart_ring *ring);
-void uart_tx_ring(uart_ring *q);
-void uart_send_break(uart_ring *u);
-
-=======
->>>>>>> Stashed changes
 // ******************************** UART buffers ********************************
 
 // debug = USART2
@@ -143,7 +112,6 @@ bool put_char(uart_ring *q, char elem) {
   return ret;
 }
 
-<<<<<<< Updated upstream
 void clear_uart_buff(uart_ring *q) {
   ENTER_CRITICAL();
   q->w_ptr_tx = 0;
@@ -153,8 +121,6 @@ void clear_uart_buff(uart_ring *q) {
   EXIT_CRITICAL();
 }
 
-=======
->>>>>>> Stashed changes
 // ************************ High-level debug functions **********************
 void putch(const char a) {
   // misra-c2012-17.7: serial debug function, ok to ignore output
@@ -168,23 +134,6 @@ void print(const char *a) {
   }
 }
 
-<<<<<<< Updated upstream
-void putui(uint32_t i) {
-  uint32_t i_copy = i;
-  char str[11];
-  uint8_t idx = 10;
-  str[idx] = '\0';
-  idx--;
-  do {
-    str[idx] = (i_copy % 10U) + 0x30U;
-    idx--;
-    i_copy /= 10;
-  } while (i_copy != 0U);
-  print(&str[idx + 1U]);
-}
-
-=======
->>>>>>> Stashed changes
 void puthx(uint32_t i, uint8_t len) {
   const char c[] = "0123456789abcdef";
   for (int pos = ((int)len * 4) - 4; pos > -4; pos -= 4) {
@@ -196,40 +145,25 @@ void puth(unsigned int i) {
   puthx(i, 8U);
 }
 
-<<<<<<< Updated upstream
 void puth2(unsigned int i) {
   puthx(i, 2U);
 }
 
+#if defined(ENABLE_SPI) || defined(BOOTSTUB) || defined(DEBUG)
 void puth4(unsigned int i) {
   puthx(i, 4U);
 }
+#endif
 
+#if defined(ENABLE_SPI) || defined(BOOTSTUB) || defined(DEBUG_USB) || defined(DEBUG_COMMS)
 void hexdump(const void *a, int l) {
   if (a != NULL) {
     for (int i=0; i < l; i++) {
       if ((i != 0) && ((i & 0xf) == 0)) print("\n");
       puth2(((const unsigned char*)a)[i]);
-=======
-#if defined(DEBUG_SPI) || defined(BOOTSTUB) || defined(DEBUG)
-static void puth4(unsigned int i) {
-  puthx(i, 4U);
-}
-#endif
-
-#if defined(DEBUG_SPI) || defined(BOOTSTUB) || defined(DEBUG_USB) || defined(DEBUG_COMMS)
-static void hexdump(const void *a, int l) {
-  if (a != NULL) {
-    for (int i=0; i < l; i++) {
-      if ((i != 0) && ((i & 0xf) == 0)) print("\n");
-      puthx(((const unsigned char*)a)[i], 2U);
->>>>>>> Stashed changes
       print(" ");
     }
   }
   print("\n");
 }
-<<<<<<< Updated upstream
-=======
 #endif
->>>>>>> Stashed changes

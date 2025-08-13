@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 import os
 import random
-<<<<<<< Updated upstream
-=======
-from opendbc.car.structs import CarParams
->>>>>>> Stashed changes
 from panda import PandaJungle
 
 def get_test_string():
@@ -13,11 +9,7 @@ def get_test_string():
 if __name__ == "__main__":
   p = PandaJungle()
 
-<<<<<<< Updated upstream
   p.set_safety_mode(PandaJungle.SAFETY_ALLOUTPUT)
-=======
-  p.set_safety_mode(CarParams.SafetyModel.allOutput)
->>>>>>> Stashed changes
 
   print("Spamming all buses...")
   while True:

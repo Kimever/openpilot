@@ -100,18 +100,9 @@ class SpiDevice:
     if spidev is None:
       raise PandaSpiUnavailable("spidev is not installed")
 
-<<<<<<< Updated upstream
     self._spidev = spidev.SpiDev()  # pylint: disable=c-extension-no-member
     self._spidev.open(0, 0)
     self._spidev.max_speed_hz = speed
-=======
-    with SPI_LOCK:
-      if speed not in SPI_DEVICES:
-        SPI_DEVICES[speed] = spidev.SpiDev()
-        SPI_DEVICES[speed].open(0, 0)
-        SPI_DEVICES[speed].max_speed_hz = speed
-      self._spidev = SPI_DEVICES[speed]
->>>>>>> Stashed changes
 
   @contextmanager
   def acquire(self):

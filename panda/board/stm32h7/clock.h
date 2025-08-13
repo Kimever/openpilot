@@ -17,15 +17,6 @@ APB4 per: 60MHz
 PCLK1: 60MHz (for USART2,3,4,5,7,8)
 */
 
-<<<<<<< Updated upstream
-void clock_init(void) {
-  // Set power mode to direct SMPS power supply(depends on the board layout)
-#ifndef STM32H723
-  register_set(&(PWR->CR3), PWR_CR3_SMPSEN, 0xFU); // powered only by SMPS
-#else
-  register_set(&(PWR->CR3), PWR_CR3_LDOEN, 0xFU);
-#endif
-=======
 typedef enum {
   PACKAGE_UNKNOWN = 0,
   PACKAGE_WITH_SMPS = 1,
@@ -75,7 +66,6 @@ void clock_init(void) {
     while(true); // unknown package, let's hang here
   }
 
->>>>>>> Stashed changes
   // Set VOS level (VOS3 to 170Mhz, VOS2 to 300Mhz, VOS1 to 400Mhz, VOS0 to 550Mhz)
   register_set(&(PWR->D3CR), PWR_D3CR_VOS_1 | PWR_D3CR_VOS_0, 0xC000U); //VOS1, needed for 80Mhz CAN FD
   while ((PWR->CSR1 & PWR_CSR1_ACTVOSRDY) == 0U);
@@ -119,11 +109,6 @@ void clock_init(void) {
   register_set(&(RCC->D2CCIP2R), RCC_D2CCIP2R_USBSEL_1 | RCC_D2CCIP2R_USBSEL_0, RCC_D2CCIP2R_USBSEL);
   // Configure clock source for FDCAN (PLL1Q at 80Mhz)
   register_set(&(RCC->D2CCIP1R), RCC_D2CCIP1R_FDCANSEL_0, RCC_D2CCIP1R_FDCANSEL);
-<<<<<<< Updated upstream
-=======
-  // Configure clock source for DFSDM1
-  register_set_bits(&(RCC->D2CCIP1R), RCC_D2CCIP1R_DFSDM1SEL);
->>>>>>> Stashed changes
   // Configure clock source for ADC1,2,3 (per_ck(currently HSE))
   register_set(&(RCC->D3CCIPR), RCC_D3CCIPR_ADCSEL_1, RCC_D3CCIPR_ADCSEL);
   //Enable the Clock Security System

@@ -14,10 +14,7 @@ struct harness_t {
 extern struct harness_t harness;
 
 struct harness_configuration {
-<<<<<<< Updated upstream
   const bool has_harness;
-=======
->>>>>>> Stashed changes
   GPIO_TypeDef * const GPIO_SBU1;
   GPIO_TypeDef * const GPIO_SBU2;
   GPIO_TypeDef * const GPIO_relay_SBU1;
@@ -26,13 +23,8 @@ struct harness_configuration {
   const uint8_t pin_SBU2;
   const uint8_t pin_relay_SBU1;
   const uint8_t pin_relay_SBU2;
-<<<<<<< Updated upstream
   const uint8_t adc_channel_SBU1;
   const uint8_t adc_channel_SBU2;
-=======
-  const adc_signal_t adc_signal_SBU1;
-  const adc_signal_t adc_signal_SBU2;
->>>>>>> Stashed changes
 };
 
 // The ignition relay is only used for testing purposes
